@@ -1,12 +1,14 @@
 import { Text, View, Image } from 'react-native';
 import { SignedOut, useUser, SignedIn, useAuth } from '@clerk/clerk-expo';
 import { Button } from '@rneui/themed';
+import { useEffect } from 'react';
 
 const SignOut = () => {
   const { isLoaded, signOut } = useAuth();
-  if (!isLoaded) {
-    return null;
-  }
+  // if (!isLoaded) {
+  //   return null;
+  // }
+
   return (
     <View>
       <Button
@@ -15,12 +17,15 @@ const SignOut = () => {
           signOut();
         }}
       />
+      {}
     </View>
   );
 };
 
 const HomeScreen = ({ navigation }) => {
   const { isSignedIn, user, isLoaded } = useUser();
+
+  useEffect(() => {}, []);
 
   if (!isLoaded) {
     console.log('Loading...');

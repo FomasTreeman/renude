@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+model Listing {
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  price       Int
+  description String?
+  sold        Boolean     @default(false)
+  userId      Int         @unique
+  user        User        @relation(fields: [userId], references: [id])
+  Image       Image[] // one-to-many relation
+  Favourite   Favourite[] // one-to-many relation
+}
+
+model Image {
+  id        Int     @id @default(autoincrement())
+  path      String
+  listingId Int
+  lsiting   Listing @relation(fields: [listingId], references: [id])
+}
+
+model Favourite {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  listingId Int     @unique
+  user      User    @relation(fields: [userId], references: [id])
+  listing   Listing @relation(fields: [listingId], references: [id])
+}
+
+model Rating {
+  id     Int  @id @default(autoincrement())
+  rating Int
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  location  String
+  Listing   Listing[] // one-to-many relation
+  Favourite Favourite[] // one-to-many relation
+  Rating    Rating[] // one-to-many relation
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
