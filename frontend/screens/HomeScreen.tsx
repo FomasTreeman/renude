@@ -17,7 +17,7 @@ const SignOut = () => {
           signOut();
         }}
       />
-      {}
+      { }
     </View>
   );
 };
@@ -25,7 +25,7 @@ const SignOut = () => {
 const HomeScreen = ({ navigation }) => {
   const { isSignedIn, user, isLoaded } = useUser();
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   if (!isLoaded) {
     console.log('Loading...');
@@ -41,6 +41,14 @@ const HomeScreen = ({ navigation }) => {
         <Text className="m-5 bg-red-200 p-5 text-xl text-center">
           Hello {user?.username}!
         </Text>
+        <View className="m-auto">
+          <Button
+            title="upload"
+            onPress={() => navigation.navigate('Upload')}
+            color={'green'}
+            buttonStyle={{ borderRadius: 30, maxWidth: 100, margin: 10 }}
+          />
+        </View>
         <SignOut />
       </SignedIn>
       <SignedOut>

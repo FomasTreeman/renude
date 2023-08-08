@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './screens/Login';
 import SignUp from './screens/SignUp';
+import Upload from './screens/Upload';
 import HomeScreen from './screens/HomeScreen';
 import * as SecureStore from 'expo-secure-store';
 
@@ -37,6 +38,11 @@ const App = () => {
       >
         <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen
+            name="Upload"
+            component={Upload}
+            options={{ title: 'Upload listing' }}
+          />
           <Stack.Screen
             name="SignUp"
             component={SignUp}

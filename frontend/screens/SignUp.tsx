@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import { Input, Card, Button } from '@rneui/themed';
@@ -6,11 +6,12 @@ import { Input, Card, Button } from '@rneui/themed';
 export default function SignUp({ navigation }) {
   const { isLoaded, signUp, setActive } = useSignUp();
 
-  const [emailAddress, setEmailAddress] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [pendingVerification, setPendingVerification] = React.useState(false);
-  const [code, setCode] = React.useState('');
+  const [emailAddress, setEmailAddress] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [pendingVerification, setPendingVerification] = useState(false);
+  const [code, setCode] = useState('');
+  const [error, setError]: [error: Array<'email_address' | "username" | "password">, setError: any] = useState([]);
 
   // start the sign up process.
   const onSignUpPress = async () => {
@@ -24,15 +25,19 @@ export default function SignUp({ navigation }) {
         password,
       });
 
-      console.log({ createResult });
+      // console.log({ createResult });
 
       // send the email.
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
 
       // change the UI to our pending section.
       setPendingVerification(true);
+      setError([])
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));
+      const errors = err.errors.map((err: any) => err.meta.paramName);
+      console.log(errors)
+      setError([...error.concat(errors)]);
     }
   };
 
@@ -52,6 +57,7 @@ export default function SignUp({ navigation }) {
     }
   };
 
+  console.log(error)
   return (
     <Card>
       {!pendingVerification ? (
@@ -60,18 +66,21 @@ export default function SignUp({ navigation }) {
             autoCapitalize="none"
             value={emailAddress}
             placeholder="Email..."
+            errorMessage={error.includes('email_address') ? 'Invalid' : ''}
             onChangeText={(email: string) => setEmailAddress(email)}
           />
           <Input
             autoCapitalize="none"
             value={username}
             placeholder="Username..."
+            errorMessage={error.includes('username') ? 'Invalid' : ''}
             onChangeText={(username: string) => setUsername(username)}
           />
           <Input
             value={password}
             placeholder="Password..."
             secureTextEntry={true}
+            errorMessage={error.includes('password') ? 'Invalid' : ''}
             onChangeText={(password: string) => setPassword(password)}
           />
 
@@ -92,3 +101,4 @@ export default function SignUp({ navigation }) {
     </Card>
   );
 }
+
