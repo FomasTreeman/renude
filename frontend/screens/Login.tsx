@@ -1,11 +1,14 @@
-import { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useState, useContext } from 'react';
+import { TextInput, SafeAreaView, Text, View } from 'react-native';
+import Continue from '../components/Continue';
 import { useSignIn } from '@clerk/clerk-expo';
-import { Input, Card, Button } from '@rneui/themed';
+import Button from '../components/Button';
+import { ThemeContext } from '../context/ThemeContext';
 
 export default function Login({ navigation }) {
   const { signIn, setActive, isLoaded } = useSignIn();
 
+  const theme = useContext(ThemeContext)
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
 
@@ -31,21 +34,48 @@ export default function Login({ navigation }) {
     }
   };
   return (
-    <Card>
-      <Input
-        autoCapitalize="none"
-        value={emailAddress}
-        placeholder="Email..."
-        onChangeText={(email: string) => setEmailAddress(email)}
-      />
-      <Input
-        value={password}
-        placeholder="Password..."
-        secureTextEntry={true}
-        onChangeText={(password: string) => setPassword(password)}
-      />
+    <SafeAreaView className='mx-8 my-5'>
+      <View className="ml-auto">
+        <Button
+          text="sign up"
+          cb={() => navigation.navigate('SignUp')}
+          colour='orange'
+        />
+      </View>
 
-      <Button onPress={onSignInPress}>Log In</Button>
-    </Card>
+      <Text style={theme.textVariants.h1}>
+        Hello again,
+      </Text>
+      <Text style={theme.textVariants.h3} className='mb-5'>
+        Welcome back
+      </Text>
+
+      <View className='flex flex-col gap-5 my-3'>
+
+        <TextInput
+          style={theme.textInput}
+          autoCapitalize='none'
+          value={emailAddress}
+          placeholder='Email'
+          keyboardType='email-address'
+          textContentType='emailAddress'
+          onChangeText={(email: string) => setEmailAddress(email)}
+        />
+
+        <TextInput
+          style={theme.textInput}
+          autoCapitalize='none'
+          value={password}
+          placeholder='Password'
+          secureTextEntry
+          textContentType='password'
+          onChangeText={(password: string) => setPassword(password)}
+        />
+      </View>
+
+      <View className='mx-auto my-10'>
+        <Continue cb={onSignInPress} />
+      </View>
+    </SafeAreaView>
   );
 }

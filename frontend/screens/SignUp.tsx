@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { useState, useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
+import { Text, View, TextInput, SafeAreaView } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
-import { Input, Card, Button } from '@rneui/themed';
+import Button from '../components/Button';
+import Continue from '../components/Continue';
 
 export default function SignUp({ navigation }) {
+  const theme = useContext(ThemeContext)
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const [emailAddress, setEmailAddress] = useState('');
@@ -59,46 +62,71 @@ export default function SignUp({ navigation }) {
 
   console.log(error)
   return (
-    <Card>
+    <>
       {!pendingVerification ? (
-        <View>
-          <Input
-            autoCapitalize="none"
-            value={emailAddress}
-            placeholder="Email..."
-            errorMessage={error.includes('email_address') ? 'Invalid' : ''}
-            onChangeText={(email: string) => setEmailAddress(email)}
-          />
-          <Input
-            autoCapitalize="none"
-            value={username}
-            placeholder="Username..."
-            errorMessage={error.includes('username') ? 'Invalid' : ''}
-            onChangeText={(username: string) => setUsername(username)}
-          />
-          <Input
-            value={password}
-            placeholder="Password..."
-            secureTextEntry={true}
-            errorMessage={error.includes('password') ? 'Invalid' : ''}
-            onChangeText={(password: string) => setPassword(password)}
-          />
+        <SafeAreaView className='mx-8 my-5'>
+          <View className="ml-auto">
+            <Button
+              text="login"
+              cb={() => navigation.navigate('Login')}
+              colour='orange'
+            />
+          </View>
 
-          <Button onPress={onSignUpPress}>Sign up</Button>
-        </View>
+          <Text style={theme.textVariants.h1}>
+            Hello,
+          </Text>
+          <Text style={theme.textVariants.h3} className='mb-5'>
+            Let's get you signed up
+          </Text>
+
+          <View className='flex flex-col gap-5 my-3'>
+
+            <TextInput
+              style={theme.textInput}
+              autoCapitalize="none"
+              value={emailAddress}
+              placeholder='Email'
+              keyboardType='email-address'
+              textContentType='emailAddress'
+              onChangeText={(email: string) => setEmailAddress(email)}
+            />
+            <TextInput
+              style={theme.textInput}
+              autoCapitalize="none"
+              value={username}
+              placeholder="Username..."
+              onChangeText={(username: string) => setUsername(username)}
+            />
+            <TextInput
+              style={theme.textInput}
+              autoCapitalize="none"
+              value={password}
+              placeholder='Password'
+              secureTextEntry
+              textContentType='password'
+              onChangeText={(password: string) => setPassword(password)}
+            />
+          </View>
+
+          <View className='mx-auto my-10'>
+            <Continue cb={onSignUpPress} />
+          </View>
+        </SafeAreaView>
+
       ) : (
         <View className="">
           <View>
-            <Input
+            <TextInput
               value={code}
               placeholder="Code..."
               onChangeText={(code: string) => setCode(code)}
             />
           </View>
-          <Button onPress={onPressVerify}>Verify Email</Button>
+          <Button text='Verify Email' colour='purple' cb={onPressVerify} />
         </View>
       )}
-    </Card>
+    </>
   );
 }
 

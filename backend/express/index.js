@@ -30,7 +30,8 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null, Date.now().toString());
+      const key = `${req?.user || 'unknown'}/${file.originalname}/${Date.now().toString()}` ;
+      cb(null, key);
     },
   }),
 });
@@ -38,6 +39,18 @@ const upload = multer({
 app.post('/upload', upload.array('photos'), (req, res) => {
   res.send('Successfully uploaded ' + req.files?.length + ' files!');
 });
+
+app.get('/users/images', (req, res) => {
+  // for a given user find all images in cloudflare storage and return to client
+})
+
+app.get('/listing/images', (req, res) => {
+  // for a given listing find all images in cloudflare storage and return to client
+})
+
+app.get('/listings/images', (req, res) => {
+  // for all listings find all images in cloudflare storage and return to client
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

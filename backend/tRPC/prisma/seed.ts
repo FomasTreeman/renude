@@ -38,8 +38,8 @@ async function seedData() {
         const user = await prisma.user.create({
             data: {
                 email: `user${i + 1}@example.com`,
-                lat: locations[i].lat,
                 lng: locations[i].lng,
+                lat: locations[i].lat,
             },
             select: {
                 id: true

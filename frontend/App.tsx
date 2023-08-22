@@ -1,16 +1,14 @@
 // @ts-ignore
 import { CLERK_PUBLISHABLE_KEY } from '@env';
 import React from 'react';
-import { ClerkProvider } from '@clerk/clerk-expo';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './screens/Login';
-import SignUp from './screens/SignUp';
-import Upload from './screens/Upload';
-import HomeScreen from './screens/HomeScreen';
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import * as SecureStore from 'expo-secure-store';
-
-const Stack = createNativeStackNavigator();
+import { ThemeContext } from './context/ThemeContext';
+import { theme } from './theme'
+import { useFonts } from 'expo-font';
+import TabNavigator from './components/Tabs';
+import AuthNavigator from './components/AuthNavigator';
+import { NavigationContainer } from '@react-navigation/native';
 
 const tokenCache = {
   async getToken(key: string) {
@@ -29,29 +27,34 @@ const tokenCache = {
   },
 };
 
+
+
 const App = () => {
+  const [loaded] = useFonts({
+    Syne: require('./assets/fonts/Syne/Syne-VariableFont_wght.ttf'),
+    Inter: require('./assets/fonts/Inter/Inter-VariableFont.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
-    <NavigationContainer>
+    <ThemeContext.Provider value={theme}>
       <ClerkProvider
         tokenCache={tokenCache}
         publishableKey={CLERK_PUBLISHABLE_KEY}
       >
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen
-            name="Upload"
-            component={Upload}
-            options={{ title: 'Upload listing' }}
-          />
-          <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ title: 'Sign up' }}
-          />
-          <Stack.Screen name="Login" component={Login} />
-        </Stack.Navigator>
+        <NavigationContainer>
+          {/* <SignedIn> */}
+          <TabNavigator />
+          {/* </SignedIn> */}
+          {/* <SignedOut>
+            <AuthNavigator />
+          </SignedOut> */}
+        </NavigationContainer>
       </ClerkProvider>
-    </NavigationContainer>
+    </ThemeContext.Provider>
   );
 };
 
