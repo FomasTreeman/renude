@@ -1,11 +1,12 @@
 import { useState, useContext } from 'react';
-import { TextInput, SafeAreaView, Text, View } from 'react-native';
+import { TextInput, SafeAreaView, View, StyleProp, TextStyle } from 'react-native';
 import Continue from '../components/Continue';
 import { useSignIn } from '@clerk/clerk-expo';
 import Button from '../components/Button';
+import Text from '../components/Text';
 import { ThemeContext } from '../context/ThemeContext';
 
-export default function Login({ navigation }) {
+export default function Login({ navigation }: any) {
   const { signIn, setActive, isLoaded } = useSignIn();
 
   const theme = useContext(ThemeContext)
@@ -43,13 +44,8 @@ export default function Login({ navigation }) {
         />
       </View>
 
-      <Text style={theme.textVariants.h1}>
-        Hello again,
-      </Text>
-      <Text style={theme.textVariants.h3} className='mb-5'>
-        Welcome back
-      </Text>
-
+      <Text text='Hello again,' tag='h1' />
+      <Text text='Welcome back' tag='h3' tw='mb-5' />
       <View className='flex flex-col gap-5 my-3'>
 
         <TextInput
@@ -76,6 +72,6 @@ export default function Login({ navigation }) {
       <View className='mx-auto my-10'>
         <Continue cb={onSignInPress} />
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }

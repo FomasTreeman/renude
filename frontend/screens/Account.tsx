@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 import { useAuth } from '@clerk/clerk-react';
 import Button from '../components/Button';
 
@@ -19,6 +19,8 @@ const SignOut = () => {
 };
 export default function Account() {
     return (
-        <SignOut />
+        <SafeAreaView>
+            <SignOut />
+        </SafeAreaView>
     )
 }

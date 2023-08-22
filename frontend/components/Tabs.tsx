@@ -1,21 +1,33 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Image } from 'expo-image';
 
 import { useContext } from 'react'
 import Upload from '../screens/Upload';
 import Listings from '../screens/Listings';
+import Listing from '../screens/Listing';
 import Account from '../screens/Account';
 import { ThemeContext } from '../context/ThemeContext';
 import { StyleSheet, View } from 'react-native';
 // import Search from '../screens/Search';
 
 const Tab = createBottomTabNavigator()
+const ListingsStack = createNativeStackNavigator();
 
 const images = {
     account: require('../assets/account.svg'),
     search: require('../assets/search.svg'),
     upload: require('../assets/upload.svg'),
     listings: require('../assets/listings.svg'),
+}
+
+function ListingsStackScreen() {
+    return (
+        <ListingsStack.Navigator screenOptions={{ headerShown: false }}>
+            <ListingsStack.Screen name="Listings" component={Listings} />
+            <ListingsStack.Screen name="Listing" component={Listing} />
+        </ListingsStack.Navigator >
+    )
 }
 
 export default function Tabs() {
@@ -34,10 +46,10 @@ export default function Tabs() {
     })
 
     return (
-        <Tab.Navigator screenOptions={{ tabBarStyle: style.navbar }}>
+        <Tab.Navigator screenOptions={{ tabBarStyle: style.navbar, headerShown: false }}>
             <Tab.Screen
                 name="Listings"
-                component={Listings}
+                component={ListingsStackScreen}
                 options={{
                     title: 'Listings',
                     tabBarShowLabel: false,
@@ -91,7 +103,7 @@ const Icon = ({ focused, size, imageKey }: { focused: boolean, size: number, ima
         },
         iconHover: {
             borderRadius: 5,
-            backgroundColor: theme.colours.primary.orange,
+            backgroundColor: theme.colours.primary.yellow,
             ...theme.border,
             borderWidth: 2
         }

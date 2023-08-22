@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
-import { Pressable, Text, View, StyleSheet } from "react-native";
+import { Pressable, View, StyleSheet } from "react-native";
 import { ThemeContext } from "../context/ThemeContext";
+import Text from "./Text";
 
 export default function Continue({ cb }: { cb: () => void }) {
     const theme = useContext(ThemeContext)
@@ -22,9 +23,7 @@ export default function Continue({ cb }: { cb: () => void }) {
 
     return (
         <Pressable onPress={cb} onPressIn={() => { setPressed(true) }} onPressOut={() => { setPressed(false) }} style={styles.button} >
-            <Text>
-                →
-            </Text>
+            <Text text='→' tag='h2' />
         </Pressable >
     )
 }

@@ -60,6 +60,12 @@ export const theme = {
         shadowOpacity: 1,
         shadowRadius: 0,
     },
+    shadowLg: {
+        shadowColor: 'black',
+        shadowOffset: { width: 8, height: 8 },
+        shadowOpacity: 1,
+        shadowRadius: 0,
+    },
     border: {
         borderBlockColor: 'black',
         borderWidth: 1,

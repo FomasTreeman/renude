@@ -1,11 +1,12 @@
 import { useState, useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
-import { Text, View, TextInput, SafeAreaView } from 'react-native';
+import { View, TextInput, SafeAreaView, StyleProp, TextStyle } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import Button from '../components/Button';
+import Text from '../components/Text';
 import Continue from '../components/Continue';
 
-export default function SignUp({ navigation }) {
+export default function SignUp({ navigation }: any) {
   const theme = useContext(ThemeContext)
   const { isLoaded, signUp, setActive } = useSignUp();
 
@@ -72,13 +73,8 @@ export default function SignUp({ navigation }) {
               colour='orange'
             />
           </View>
-
-          <Text style={theme.textVariants.h1}>
-            Hello,
-          </Text>
-          <Text style={theme.textVariants.h3} className='mb-5'>
-            Let's get you signed up
-          </Text>
+          <Text text='Hello,' tag='h1' />
+          <Text text="Let's get you signed up" tag='h3' tw='mb-5' />
 
           <View className='flex flex-col gap-5 my-3'>
 
@@ -112,7 +108,7 @@ export default function SignUp({ navigation }) {
           <View className='mx-auto my-10'>
             <Continue cb={onSignUpPress} />
           </View>
-        </SafeAreaView>
+        </SafeAreaView >
 
       ) : (
         <View className="">
@@ -125,7 +121,8 @@ export default function SignUp({ navigation }) {
           </View>
           <Button text='Verify Email' colour='purple' cb={onPressVerify} />
         </View>
-      )}
+      )
+      }
     </>
   );
 }
