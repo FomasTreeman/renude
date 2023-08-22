@@ -74,7 +74,7 @@ export const theme = {
         shadowRadius: 0,
         padding: 5,
         borderRadius: 5
-    }
+    },
 };
 
 

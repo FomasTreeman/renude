@@ -16,7 +16,7 @@ export default function Continue({ cb }: { cb: () => void }) {
             height: 30,
             justifyContent: 'center',
             alignItems: 'center',
-            transform: pressed ? 'scale(1.5)' : 'scale(1)'
+            transform: pressed ? 'scale(1.5)' : 'scale(1)',
         }
     })
 

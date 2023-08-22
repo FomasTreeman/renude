@@ -35,6 +35,9 @@ dependencies:
   expo-font:
     specifier: ^11.4.0
     version: 11.4.0(expo@49.0.5)
+  expo-image:
+    specifier: ~1.0.1
+    version: 1.0.1(expo@49.0.5)
   expo-image-picker:
     specifier: ~14.3.2
     version: 14.3.2(expo@49.0.5)
@@ -4046,6 +4049,14 @@ packages:
     dependencies:
       expo: 49.0.5(@babel/core@7.20.2)
       expo-image-loader: 4.3.0(expo@49.0.5)
+    dev: false
+
+  /expo-image@1.0.1(expo@49.0.5):
+    resolution: {integrity: sha512-h3xDHaw3ZWzOKar1eFXY4CsFgDstw6fo5Tzv6BXXs+Zte5betPMb567f8zCNnhpkr7UCo5CN7Cg92o+lqzdvRA==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 49.0.5(@babel/core@7.20.2)
     dev: false
 
   /expo-keep-awake@12.3.0(expo@49.0.5):
