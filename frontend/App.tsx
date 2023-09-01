@@ -1,6 +1,9 @@
 // @ts-ignore
 import { CLERK_PUBLISHABLE_KEY } from '@env';
-import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { httpBatchLink } from '@trpc/client';
+import { trpc } from './utils/trpc';
+import React, { useState } from 'react';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import * as SecureStore from 'expo-secure-store';
 import { ThemeContext } from './context/ThemeContext';
@@ -30,6 +33,18 @@ const tokenCache = {
 
 
 const App = () => {
+
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        httpBatchLink({
+          url: 'http://localhost:3000',
+        }),
+      ],
+    }),
+  );
+
   const [loaded] = useFonts({
     Syne: require('./assets/fonts/Syne/Syne-VariableFont_wght.ttf'),
     Inter: require('./assets/fonts/Inter/Inter-VariableFont.ttf'),
@@ -45,16 +60,21 @@ const App = () => {
         tokenCache={tokenCache}
         publishableKey={CLERK_PUBLISHABLE_KEY}
       >
-        <NavigationContainer>
-          {/* <SignedIn> */}
-          <TabNavigator />
-          {/* </SignedIn> */}
-          {/* <SignedOut>
-            <AuthNavigator />
-          </SignedOut> */}
-        </NavigationContainer>
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <NavigationContainer>
+              {/* <SignedIn> */}
+              <TabNavigator />
+              {/* </SignedIn> */}
+              {/* <SignedOut>
+              <AuthNavigator />
+              </SignedOut> */}
+            </NavigationContainer>
+          </QueryClientProvider>
+        </trpc.Provider>
+
       </ClerkProvider>
-    </ThemeContext.Provider>
+    </ThemeContext.Provider >
   );
 };
 

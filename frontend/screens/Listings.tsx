@@ -1,33 +1,40 @@
 import { SafeAreaView, View, Pressable, FlatList } from 'react-native';
 // import { useUser } from '@clerk/clerk-expo';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import Text from '../components/Text';
 import Listing from '../components/Listing';
+import { trpc } from '../utils/trpc';
 
-
-
-const HomeScreen = ({ navigation }: any) => {
-  // const { isSignedIn, user, isLoaded } = useUser();
+const Listings = () => {
   const theme = useContext(ThemeContext)
+  const listingsQuery = trpc.usersListings.useQuery()
+  // const { isSignedIn, user, isLoaded } = useUser();
 
   // console.log('👩‍💻', user?.username);
+  // useEffect(() => {
+  //   async function fetchListings() {
+  //     const data = await trpc.allListings.useQuery()
+  //     if (data) {
+  //       console.log(data[0])
+  //     }
+  //   }
+  //   fetchListings()
+  // })
+
+  // const listings = trpc.allListings.useQuery()
+
+
+  console.log(listingsQuery.data[0]);
 
   return (
     <SafeAreaView>
-      <Text text='Hello 😀' tag='h1' tw='mx-auto my-3' />
-      <Text text='Suggestions' tag='h2' tw='mt-5' />
-      <FlatList data={
-        ['Jackson',
-          'James',
-          'Jillian',
-          'Jimmy',
-          'Joel',
-          'John',
-          'Julie',
-        ]}
-        renderItem={({ item }) => <Listing text={item} />}
-        keyExtractor={item => `ListEntry-${item}`}
+      <Text tag='h1' textStyle='mx-auto my-3'> Hello 😀 </Text>
+      <Text tag='h3' textStyle='mt-5' > Suggestions </Text>
+      <FlatList
+        data={listingsQuery.data}
+        renderItem={({ item }) => <Listing {...item} />}
+        keyExtractor={item => `ListEntry-${item.createdAt}`}
         horizontal
         style={{ height: 225 }}
       />
@@ -35,5 +42,5 @@ const HomeScreen = ({ navigation }: any) => {
   );
 };
 
-export default HomeScreen;
+export default Listings;
 

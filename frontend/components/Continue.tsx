@@ -23,7 +23,7 @@ export default function Continue({ cb }: { cb: () => void }) {
 
     return (
         <Pressable onPress={cb} onPressIn={() => { setPressed(true) }} onPressOut={() => { setPressed(false) }} style={styles.button} >
-            <Text text='→' tag='h2' />
+            <Text tag='h2' > → </Text>
         </Pressable >
     )
 }

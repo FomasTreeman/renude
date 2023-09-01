@@ -1,11 +1,26 @@
 import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-import { Text as DefaultText, StyleProp, TextStyle } from "react-native";
+import { Text as DefaultText, TextProps, TextStyle, StyleProp, View } from "react-native";
 import type { TextVariants } from '../types'
+import { styled } from "nativewind";
 
-export default function Text({ tag, text, tw = '' }: { tag: TextVariants, text: String, tw?: string }) {
+interface Props {
+    children: String | String[],
+    textStyle?: TextProps["style"],
+    tag: TextVariants
+}
+
+function Text({ children, textStyle, tag }: Props) {
     const theme = useContext(ThemeContext)
     return (
-        <DefaultText style={theme.textVariants[tag] as StyleProp<TextStyle>} className={tw}> {text} </DefaultText>
+        <View style={textStyle}>
+            <DefaultText style={theme.textVariants[tag] as StyleProp<TextStyle>} > {children} </DefaultText>
+        </View>
     )
 }
+
+export default styled(Text, {
+    props: {
+        textStyle: true
+    }
+})

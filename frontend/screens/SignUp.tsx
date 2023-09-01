@@ -73,8 +73,8 @@ export default function SignUp({ navigation }: any) {
               colour='orange'
             />
           </View>
-          <Text text='Hello,' tag='h1' />
-          <Text text="Let's get you signed up" tag='h3' tw='mb-5' />
+          <Text tag='h1' > Hello, </Text>
+          <Text tag='h3' textStyle='mb-5' > Let's get you signed up </Text>
 
           <View className='flex flex-col gap-5 my-3'>
 

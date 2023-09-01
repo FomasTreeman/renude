@@ -10,19 +10,19 @@ export default function button({ colour, text, cb }: { colour: 'green' | 'purple
         button: {
             fontFamily: 'Syne',
             backgroundColor: theme.colours.primary[colour],
-            ...theme.shadow,
-            ...theme.border,
             borderRadius: 5,
             padding: 5,
             marginHorizontal: 20,
             marginVertical: 10,
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            ...theme.border,
+            ...theme.shadow,
         }
     })
     return (
         <Pressable style={styles.button} onPress={cb}>
-            <Text text={text} tag='body' />
+            <Text tag='body'> {text} </Text>
         </Pressable>
     )
 }

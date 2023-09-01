@@ -1,10 +1,28 @@
 import { Image } from "expo-image"
 import Text from "./Text"
 import { StyleSheet, View } from "react-native"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { ThemeContext } from "../context/ThemeContext"
-export default function Listing(props) {
+
+export default function Listing({ price, description, sold, image }) {
     const theme = useContext(ThemeContext)
+    const [url, setUrl] = useState('')
+
+    useEffect(() => {
+        async function getUrl() {
+            try {
+                const response = await fetch(
+                    `http://localhost:3001/listing/images/${image[0].path}`,
+                );
+                const urlRes = await response.text();
+                setUrl(urlRes)
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        getUrl()
+    }, [])
+
     const styles = StyleSheet.create({
         container: {
             maxWidth: 255,
@@ -39,10 +57,11 @@ export default function Listing(props) {
     })
     return (
         <View style={styles.container}>
-            <Image source={require('../assets/icon.png')} style={{ width: 250, height: 150, ...styles.image }} />
+            {/* <Image source={require('../assets/icon.png')} style={{ width: 250, height: 150, ...styles.image }} /> */}
+            <Image source={url} style={{ width: 250, height: 150, ...styles.image }} />
             <View style={styles.footer}>
-                <Text text={props.text} tag='body' />
-                <Text text='£15' tag='h4' />
+                <Text tag='body' > {description} </Text>
+                <Text tag='h4' > £{price} </Text>
             </View>
         </View>
     )

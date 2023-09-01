@@ -44,8 +44,8 @@ export default function Login({ navigation }: any) {
         />
       </View>
 
-      <Text text='Hello again,' tag='h1' />
-      <Text text='Welcome back' tag='h3' tw='mb-5' />
+      <Text tag='h1'> Hello again </Text>
+      <Text tag='h3' textStyle='mb-5'> Welcome back </Text>
       <View className='flex flex-col gap-5 my-3'>
 
         <TextInput
