@@ -33,7 +33,6 @@ const tokenCache = {
 
 
 const App = () => {
-
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -54,6 +53,7 @@ const App = () => {
     return null;
   }
 
+
   return (
     <ThemeContext.Provider value={theme}>
       <ClerkProvider
@@ -63,12 +63,12 @@ const App = () => {
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
             <NavigationContainer>
-              {/* <SignedIn> */}
-              <TabNavigator />
-              {/* </SignedIn> */}
-              {/* <SignedOut>
-              <AuthNavigator />
-              </SignedOut> */}
+              <SignedIn>
+                <TabNavigator />
+              </SignedIn>
+              <SignedOut>
+                <AuthNavigator />
+              </SignedOut>
             </NavigationContainer>
           </QueryClientProvider>
         </trpc.Provider>

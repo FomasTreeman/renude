@@ -49,8 +49,8 @@ model Rating {
 model User {
   id        Int         @id @default(autoincrement())
   email     String      @unique
-  lng       Float
-  lat       Float
+  lng       Float?
+  lat       Float?
   listing   Listing[] // one-to-many relation
   favourite Favourite[] // one-to-many relation
   ratingRx  Rating[]    @relation("rx") // one-to-many relation

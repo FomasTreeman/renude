@@ -28,50 +28,65 @@ export default function Login({ navigation }: any) {
       // This is an important step,
       // This indicates the user is signed in
       await setActive({ session: completeSignIn.createdSessionId });
-      navigation.navigate('Home');
     } catch (err: any) {
       console.log('error')
       console.log({ err });
     }
   };
   return (
-    <SafeAreaView className='mx-8 my-5'>
-      <View className="ml-auto">
-        <Button
-          text="sign up"
-          cb={() => navigation.navigate('SignUp')}
-          colour='orange'
-        />
-      </View>
+    <View style={{ backgroundColor: theme.colours.background, height: '100%' }}>
+      <SafeAreaView className='my-5 mt-10'>
 
-      <Text tag='h1'> Hello again </Text>
-      <Text tag='h3' textStyle='mb-5'> Welcome back </Text>
-      <View className='flex flex-col gap-5 my-3'>
+        <View className="ml-auto mr-2">
+          <Button
+            text="sign up"
+            cb={() => navigation.navigate('SignUp')}
+            colour='orange'
+          />
+        </View>
 
-        <TextInput
-          style={theme.textInput}
-          autoCapitalize='none'
-          value={emailAddress}
-          placeholder='Email'
-          keyboardType='email-address'
-          textContentType='emailAddress'
-          onChangeText={(email: string) => setEmailAddress(email)}
-        />
+        <View className='mx-10'>
 
-        <TextInput
-          style={theme.textInput}
-          autoCapitalize='none'
-          value={password}
-          placeholder='Password'
-          secureTextEntry
-          textContentType='password'
-          onChangeText={(password: string) => setPassword(password)}
-        />
-      </View>
+          <Text tag='h1' textStyle='my-2'>Hello again, </Text>
+          <Text tag='h3' textStyle='mb-5'>  Welcome back </Text>
 
-      <View className='mx-auto my-10'>
-        <Continue cb={onSignInPress} />
-      </View>
-    </SafeAreaView >
+          <View className='flex flex-col gap-5 my-3'>
+
+            <View style={{ position: 'relative' }}>
+              <View style={[theme.textInputLabel, { position: 'absolute' }]} >
+                <Text tag='body'>Email</Text>
+              </View>
+              <TextInput
+                style={theme.textInput}
+                autoCapitalize='none'
+                value={emailAddress}
+                keyboardType='email-address'
+                textContentType='emailAddress'
+                onChangeText={(email: string) => setEmailAddress(email)}
+              />
+            </View>
+
+            <View style={{ position: 'relative' }}>
+              <View style={[theme.textInputLabel, { position: 'absolute' }]} >
+                <Text tag='body'>Password</Text>
+              </View>
+              <TextInput
+                style={theme.textInput}
+                autoCapitalize='none'
+                value={password}
+                secureTextEntry
+                textContentType='password'
+                onChangeText={(password: string) => setPassword(password)}
+              />
+            </View>
+          </View>
+
+          <View className='mx-auto my-10'>
+            <Continue cb={onSignInPress} />
+          </View>
+
+        </View>
+      </SafeAreaView >
+    </View>
   );
 }

@@ -7,13 +7,14 @@ import { styled } from "nativewind";
 interface Props {
     children: String | String[],
     textStyle?: TextProps["style"],
+    style?: StyleProp<TextStyle>,
     tag: TextVariants
 }
 
-function Text({ children, textStyle, tag }: Props) {
+function Text({ children, textStyle, tag, style }: Props) {
     const theme = useContext(ThemeContext)
     return (
-        <View style={textStyle}>
+        <View style={[textStyle, style]} >
             <DefaultText style={theme.textVariants[tag] as StyleProp<TextStyle>} > {children} </DefaultText>
         </View>
     )

@@ -53,6 +53,11 @@ export const theme = {
             fontFamily: 'Inter',
             fontSize: 14,
         },
+        error: {
+            fontFamily: 'Inter',
+            fontSize: 12,
+            color: 'red'
+        },
     },
     shadow: {
         shadowColor: 'black',
@@ -68,19 +73,30 @@ export const theme = {
     },
     border: {
         borderBlockColor: 'black',
-        borderWidth: 1,
+        borderWidth: 2
     },
     textInput: {
         fontFamily: 'Inter',
         backgroundColor: 'white',
-        borderWidth: 1,
+        borderWidth: 2,
         shadowColor: 'black',
         shadowOffset: { width: 4, height: 4 },
         shadowOpacity: 1,
-        shadowRadius: 0,
-        padding: 5,
-        borderRadius: 5
+        shadowRadius: 0.2,
+        padding: 10,
+        borderRadius: 7.5,
+        marginTop: 35,
     },
+    textInputLabel: { // doesn't like have absolute here??
+        left: 16,
+        fontSize: 16,
+        color: 'gray',
+        backgroundColor: palette.bg,
+        paddingHorizontal: 5,
+        top: 28,
+        zIndex: 1,
+        shadowColor: 'none'
+    }
 };
 
 

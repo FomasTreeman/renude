@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Pressable, FlatList } from 'react-native';
+import { SafeAreaView, View, Pressable, FlatList, ScrollView } from 'react-native';
 // import { useUser } from '@clerk/clerk-expo';
 import { useContext, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
@@ -24,20 +24,39 @@ const Listings = () => {
 
   // const listings = trpc.allListings.useQuery()
 
-
-  console.log(listingsQuery.data[0]);
-
   return (
     <SafeAreaView>
-      <Text tag='h1' textStyle='mx-auto my-3'> Hello 😀 </Text>
-      <Text tag='h3' textStyle='mt-5' > Suggestions </Text>
-      <FlatList
-        data={listingsQuery.data}
-        renderItem={({ item }) => <Listing {...item} />}
-        keyExtractor={item => `ListEntry-${item.createdAt}`}
-        horizontal
-        style={{ height: 225 }}
-      />
+      <ScrollView>
+
+        <Text tag='h1' textStyle='mx-auto my-3'> Hello 😀 </Text>
+        <View>
+          <Text tag='h3' textStyle='mt-5' > Suggestions </Text>
+          <FlatList
+            data={listingsQuery.data}
+            renderItem={({ item }) => <Listing {...item} />}
+            keyExtractor={item => `ListEntry-${item.createdAt}`}
+            horizontal
+          />
+        </View>
+        <View>
+          <Text tag='h3' textStyle='mt-5' > Favourites </Text>
+          <FlatList
+            data={listingsQuery.data}
+            renderItem={({ item }) => <Listing {...item} />}
+            keyExtractor={item => `ListEntry-${item.createdAt}`}
+            horizontal
+          />
+        </View>
+        <Text tag='h3' textStyle='mt-5' > Follower Posts </Text>
+        <View>
+          <FlatList
+            data={listingsQuery.data}
+            renderItem={({ item }) => <Listing {...item} />}
+            keyExtractor={item => `ListEntry-${item.createdAt}`}
+            horizontal
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

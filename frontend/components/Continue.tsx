@@ -13,17 +13,18 @@ export default function Continue({ cb }: { cb: () => void }) {
             ...theme.shadow,
             ...theme.border,
             borderRadius: 50,
-            width: 30,
-            height: 30,
+            width: 45,
+            height: 45,
+            flexDirection: 'row',
             justifyContent: 'center',
-            alignItems: 'center',
-            transform: pressed ? 'scale(1.5)' : 'scale(1)',
+            alignContent: 'center',
+            transform: pressed ? 'scale(1.2)' : 'scale(1)',
         }
     })
 
     return (
         <Pressable onPress={cb} onPressIn={() => { setPressed(true) }} onPressOut={() => { setPressed(false) }} style={styles.button} >
-            <Text tag='h2' > → </Text>
+            <Text tag='h2'>→ </Text>
         </Pressable >
     )
 }

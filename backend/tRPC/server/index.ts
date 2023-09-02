@@ -1,5 +1,4 @@
 import { createHTTPServer } from '@trpc/server/adapters/standalone';
-import * as trpc from '@trpc/server';
 import { publicProcedure, router } from './trpc';
 
 import db from './db';
@@ -9,10 +8,13 @@ const appRouter = router({
   allListings: publicProcedure.query(async () => {
     return await db.listing.findMany();
   }),
-  usersListings: publicProcedure.query(async () => {
+  usersListings: publicProcedure.input(String).query(async (opts) => {
+    console.log(opts.input)
     const res = await db.listing.findMany({
       where: {
-        userId: 1
+        user: {
+          id: 1
+        }
       },
       include: {
         image: {
@@ -23,7 +25,6 @@ const appRouter = router({
       }
     }
     )
-    console.log(res[0].image[0].path)
     return res
   })
   // usersListings: (id: string) => Listing[];

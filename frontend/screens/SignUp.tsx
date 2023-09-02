@@ -1,9 +1,10 @@
 import { useState, useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
-import { View, TextInput, SafeAreaView, StyleProp, TextStyle } from 'react-native';
+import { View, TextInput, SafeAreaView, StyleProp } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import Button from '../components/Button';
 import Text from '../components/Text';
+import Input from '../components/Input';
 import Continue from '../components/Continue';
 
 export default function SignUp({ navigation }: any) {
@@ -11,37 +12,37 @@ export default function SignUp({ navigation }: any) {
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const [emailAddress, setEmailAddress] = useState('');
-  const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isPasswordValid, setIsPasswordValid] = useState<null | boolean>(null);
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState('');
-  const [error, setError]: [error: Array<'email_address' | "username" | "password">, setError: any] = useState([]);
+  const [errors, setErrors]: [error: Partial<{ [Key in 'email_address' | "username" | "password"]: string }>, setError: any] = useState({} as any);
 
   // start the sign up process.
   const onSignUpPress = async () => {
     console.log('🔥 sign up pressed and isLoaded: ', isLoaded);
+    // if (!isLoaded || !isPasswordValid || !password || !emailAddress) return;
     if (!isLoaded) return;
 
     try {
-      const createResult = await signUp.create({
+      await signUp.create({
         emailAddress,
         username,
         password,
       });
-
-      // console.log({ createResult });
 
       // send the email.
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
 
       // change the UI to our pending section.
       setPendingVerification(true);
-      setError([])
+      setErrors([])
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));
-      const errors = err.errors.map((err: any) => err.meta.paramName);
-      console.log(errors)
-      setError([...error.concat(errors)]);
+      const updatedErrors = errors
+      err.errors.forEach((err: any) => updatedErrors[err.meta.paramName as keyof typeof errors] = err.longMessage);
+      setErrors(updatedErrors);
     }
   };
 
@@ -61,54 +62,72 @@ export default function SignUp({ navigation }: any) {
     }
   };
 
-  console.log(error)
+  console.log(errors)
   return (
     <>
       {!pendingVerification ? (
-        <SafeAreaView className='mx-8 my-5'>
-          <View className="ml-auto">
-            <Button
-              text="login"
-              cb={() => navigation.navigate('Login')}
-              colour='orange'
-            />
-          </View>
-          <Text tag='h1' > Hello, </Text>
-          <Text tag='h3' textStyle='mb-5' > Let's get you signed up </Text>
+        <View style={{ backgroundColor: theme.colours.background, height: '100%' }}>
+          <SafeAreaView className='my-5 mt-10'>
+            <View className="ml-auto mr-2">
+              <Button
+                text="login"
+                cb={() => navigation.navigate('Login')}
+                colour='orange'
+              />
+            </View>
+            <View className='mx-10'>
+              <Text tag='h1' textStyle='my-2' >Hello, </Text>
+              <Text tag='h3' > Let's get you signed up </Text>
 
-          <View className='flex flex-col gap-5 my-3'>
+              <View className='mb-4 mx-3'>
+                <Input
+                  placeholder='Email'
+                  type='email_address'
+                  state={emailAddress}
+                  setState={setEmailAddress}
+                  errors={errors}
+                  setErrors={setErrors}
+                />
+                <Input
+                  placeholder='Username'
+                  type='username'
+                  state={username}
+                  setState={setUsername}
+                  errors={errors}
+                  setErrors={setErrors}
+                />
+                <Input
+                  placeholder='Password'
+                  type='password'
+                  state={password}
+                  setState={setPassword}
+                  errors={errors}
+                  setErrors={setErrors}
+                />
+                <View style={{ position: 'relative' }}>
+                  <View style={[theme.textInputLabel, { position: 'absolute', top: 16 }]} >
+                    <Text tag='body'>Re-enter Password</Text>
+                  </View>
+                  <TextInput
+                    style={{ ...theme.textInput, marginTop: 25, borderColor: isPasswordValid === false ? 'red' : 'black' }}
+                    autoCapitalize="none"
+                    placeholder=''
+                    secureTextEntry
+                    textContentType='password'
+                    onChangeText={(passwordToCompare: string) => passwordToCompare === password ? setIsPasswordValid(true) : setIsPasswordValid(false)}
+                  />
+                  <View style={{ position: 'absolute', zIndex: 3, bottom: -22, left: 10 }}>
+                    {isPasswordValid === false && <Text tag='error' textStyle='mt-2' style={{ color: 'red' }}> Doesn't match</Text>}
+                  </View>
+                </View>
+              </View>
+            </View>
 
-            <TextInput
-              style={theme.textInput}
-              autoCapitalize="none"
-              value={emailAddress}
-              placeholder='Email'
-              keyboardType='email-address'
-              textContentType='emailAddress'
-              onChangeText={(email: string) => setEmailAddress(email)}
-            />
-            <TextInput
-              style={theme.textInput}
-              autoCapitalize="none"
-              value={username}
-              placeholder="Username..."
-              onChangeText={(username: string) => setUsername(username)}
-            />
-            <TextInput
-              style={theme.textInput}
-              autoCapitalize="none"
-              value={password}
-              placeholder='Password'
-              secureTextEntry
-              textContentType='password'
-              onChangeText={(password: string) => setPassword(password)}
-            />
-          </View>
-
-          <View className='mx-auto my-10'>
-            <Continue cb={onSignUpPress} />
-          </View>
-        </SafeAreaView >
+            <View className='mx-auto my-10'>
+              <Continue cb={onSignUpPress} />
+            </View>
+          </SafeAreaView >
+        </View>
 
       ) : (
         <View className="">
