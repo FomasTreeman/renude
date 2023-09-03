@@ -6,10 +6,17 @@ import db from './db';
 const appRouter = router({
   // allListings: () => Listing[];
   allListings: publicProcedure.query(async () => {
-    return await db.listing.findMany();
+    return await db.listing.findMany({
+      include: {
+        image: {
+          select: {
+            path: true
+          }
+        }
+      }
+    });
   }),
   usersListings: publicProcedure.input(String).query(async (opts) => {
-    console.log(opts.input)
     const res = await db.listing.findMany({
       where: {
         user: {

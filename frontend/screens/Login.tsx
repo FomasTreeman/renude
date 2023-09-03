@@ -57,7 +57,7 @@ export default function Login({ navigation }: any) {
           <Text tag='h1' textStyle='my-2'>Hello again, </Text>
           <Text tag='h3' textStyle='mb-5'>  Welcome back </Text>
 
-          <View className='flex flex-col gap-5 ml-0'>
+          <View style={{ display: 'flex', gap: 30, marginVertical: 60 }}>
             <Input
               placeholder='Email'
               value={emailAddress}
@@ -82,7 +82,7 @@ export default function Login({ navigation }: any) {
 
           </View>
 
-          <View className='mx-auto my-10'>
+          <View className='mx-auto'>
             <Continue cb={onSignInPress} isError={isError} />
           </View>
 

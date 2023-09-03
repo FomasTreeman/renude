@@ -79,7 +79,7 @@ export default function SignUp({ navigation }: any) {
               <Text tag='h1' textStyle='my-2' >Hello, </Text>
               <Text tag='h3' > Let's get you signed up </Text>
 
-              <View className='mb-4 mx-3'>
+              <View style={{ display: 'flex', gap: 30, marginVertical: 60 }}>
                 <InputError
                   placeholder='Email'
                   type='email_address'
@@ -118,7 +118,7 @@ export default function SignUp({ navigation }: any) {
               </View>
             </View>
 
-            <View className='mx-auto my-10'>
+            <View className='mx-auto'>
               <Continue cb={onSignUpPress} />
             </View>
           </SafeAreaView >

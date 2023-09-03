@@ -74,28 +74,6 @@ export const theme = {
     border: {
         borderBlockColor: 'black',
         borderWidth: 2
-    },
-    textInput: {
-        fontFamily: 'Inter',
-        backgroundColor: 'white',
-        borderWidth: 2,
-        shadowColor: 'black',
-        shadowOffset: { width: 4, height: 4 },
-        shadowOpacity: 1,
-        shadowRadius: 0.2,
-        padding: 10,
-        borderRadius: 7.5,
-        marginTop: 35,
-    },
-    textInputLabel: { // doesn't like have absolute here??
-        left: 16,
-        fontSize: 16,
-        color: 'gray',
-        backgroundColor: palette.bg,
-        paddingHorizontal: 5,
-        top: 28,
-        zIndex: 1,
-        shadowColor: 'none'
     }
 };
 

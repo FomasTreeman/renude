@@ -1,15 +1,16 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useContext } from 'react'
+import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 
-import { useContext } from 'react'
+import { ThemeContext } from '../context/ThemeContext';
+
 import Upload from '../screens/Upload';
 import Listings from '../screens/Listings';
 import Listing from '../screens/Listing';
 import Account from '../screens/Account';
-import { ThemeContext } from '../context/ThemeContext';
-import { StyleSheet, View } from 'react-native';
-// import Search from '../screens/Search';
+import Search from '../screens/Search';
 
 const Tab = createBottomTabNavigator()
 const ListingsStack = createNativeStackNavigator();
@@ -58,14 +59,16 @@ export default function Tabs() {
                     )
                 }}
             />
-            {/* <Tab.Screen
+            <Tab.Screen
                 name="Search"
                 component={Search}
-                options={{ title: 'Search', tabBarShowLabel: false,
+                options={{
+                    title: 'Search', tabBarShowLabel: false,
                     tabBarIcon: ({ focused, color, size }) => (
                         <Icon focused={focused} size={size} imageKey='search' />
-                    ), }}
-            /> */}
+                    ),
+                }}
+            />
             <Tab.Screen
                 name="Upload"
                 component={Upload}
