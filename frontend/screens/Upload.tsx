@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Button, Image, SafeAreaView } from 'react-native';
+import { Button, Image, Pressable, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import Text from '../components/Text';
+import Input from '../components/Input';
 
 export default function ImagePickerExample() {
     const [images, setImages]: [images: string[], setImages: any] = useState([]);
@@ -27,9 +29,15 @@ export default function ImagePickerExample() {
 
     return (
         <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button title="Pick an image from camera roll" onPress={pickImage} />
+            {/* images */}
+            <Pressable onPress={pickImage} className='bg-red-600 h-40'>
+                <Text tag='h3'> Pick an image from camera roll </Text>
+            </Pressable>
             {/* give options to remove each image from the array. STRETCH -> change order */}
             {images && images.map((image) => <Image key={Math.random()} source={{ uri: image }} style={{ width: 200, height: 200 }} />)}
+            {/* description */}
+        
+            {/* price */}
         </SafeAreaView>
     );
 }

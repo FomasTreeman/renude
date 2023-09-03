@@ -5,6 +5,7 @@ import { useSignIn } from '@clerk/clerk-expo';
 import Button from '../components/Button';
 import Text from '../components/Text';
 import { ThemeContext } from '../context/ThemeContext';
+import Input from '../components/Input';
 
 export default function Login({ navigation }: any) {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -12,6 +13,7 @@ export default function Login({ navigation }: any) {
   const theme = useContext(ThemeContext)
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
+  const [isError, setIsError] = useState(false);
 
   const onSignInPress = async () => {
     if (!isLoaded) {
@@ -26,11 +28,16 @@ export default function Login({ navigation }: any) {
 
       console.log(JSON.stringify(completeSignIn, null, 2))
       // This is an important step,
+
+      // insert email into db
+
+
       // This indicates the user is signed in
       await setActive({ session: completeSignIn.createdSessionId });
     } catch (err: any) {
       console.log('error')
       console.log({ err });
+      setIsError(true)
     }
   };
   return (
@@ -50,39 +57,33 @@ export default function Login({ navigation }: any) {
           <Text tag='h1' textStyle='my-2'>Hello again, </Text>
           <Text tag='h3' textStyle='mb-5'>  Welcome back </Text>
 
-          <View className='flex flex-col gap-5 my-3'>
+          <View className='flex flex-col gap-5 ml-0'>
+            <Input
+              placeholder='Email'
+              value={emailAddress}
+              keyboardType='email-address'
+              textContentType='emailAddress'
+              cb={(email: string) => {
+                setEmailAddress(email)
+                setIsError(false)
+              }}
+            />
 
-            <View style={{ position: 'relative' }}>
-              <View style={[theme.textInputLabel, { position: 'absolute' }]} >
-                <Text tag='body'>Email</Text>
-              </View>
-              <TextInput
-                style={theme.textInput}
-                autoCapitalize='none'
-                value={emailAddress}
-                keyboardType='email-address'
-                textContentType='emailAddress'
-                onChangeText={(email: string) => setEmailAddress(email)}
-              />
-            </View>
+            <Input
+              placeholder='Password'
+              state={password}
+              secureTextEntry
+              textContentType='password'
+              cb={(password: string) => {
+                setPassword(password)
+                setIsError(false)
+              }}
+            />
 
-            <View style={{ position: 'relative' }}>
-              <View style={[theme.textInputLabel, { position: 'absolute' }]} >
-                <Text tag='body'>Password</Text>
-              </View>
-              <TextInput
-                style={theme.textInput}
-                autoCapitalize='none'
-                value={password}
-                secureTextEntry
-                textContentType='password'
-                onChangeText={(password: string) => setPassword(password)}
-              />
-            </View>
           </View>
 
           <View className='mx-auto my-10'>
-            <Continue cb={onSignInPress} />
+            <Continue cb={onSignInPress} isError={isError} />
           </View>
 
         </View>

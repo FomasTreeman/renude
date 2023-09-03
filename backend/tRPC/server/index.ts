@@ -13,7 +13,8 @@ const appRouter = router({
     const res = await db.listing.findMany({
       where: {
         user: {
-          id: 1
+          // email: opts.input
+          id: 1 // test purposes
         }
       },
       include: {

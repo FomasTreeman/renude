@@ -4,50 +4,28 @@ import { TextInput, View } from 'react-native';
 import Text from '../components/Text';
 
 interface IInputProps {
+    children?: any, // needs type
+    style?: any, //needs style prop type 
     placeholder: string,
-    type: 'email_address' | "username" | "password",
-    state: string,
-    setState: any,
-    errors: Partial<{ [Key in 'email_address' | "username" | "password"]: string }>
-    setErrors: any,
+    cb: (x: any) => void,
+    [x: string]: any; //rest
 }
 
-export default function Input({ state, setState, placeholder, type, errors, setErrors }: IInputProps) {
+export default function Input({ children, placeholder, cb, style, ...rest }: IInputProps) {
     const theme = useContext(ThemeContext)
-
-    const hasError = (field: 'email_address' | "username" | "password") => !!errors[field];
-
-    const updateError = (field: string, message: string) => {
-        setErrors({ ...errors, [field]: message });
-    };
 
     return (
         <View style={{ position: 'relative' }}>
             <View style={[theme.textInputLabel, { position: 'absolute' }]} >
                 <Text tag='body'>{placeholder}</Text>
             </View>
-
             <TextInput
-                style={{ ...theme.textInput, borderColor: hasError(type) ? 'red' : 'black' }}
+                style={{ ...theme.textInput, ...style }}
                 autoCapitalize="none"
-                value={state}
-                secureTextEntry={type === 'password' ? true : false}
-                keyboardType={type === 'email_address' ? 'email-address' : undefined}
-                textContentType={type.replace(/_./g, x => x[1].toUpperCase()) as any} // camelise
-                onChangeText={(x: string) => {
-                    setState(x);
-                    if (hasError(type)) {
-                        updateError(type, ''); // Clear the error when typing
-                    }
-                }}
+                onChangeText={cb}
+                {...rest}
             />
-
-            {
-                hasError(type) &&
-                <View style={{ position: 'absolute', zIndex: 3, bottom: -22, left: 10 }}>
-                    <Text tag='error' textStyle='mt-2'>{errors[type] ? errors[type].substring(errors[type].indexOf(" ") + 1) : 'Error'}</Text >
-                </View>
-            }
+            {children}
         </View >
     )
 }

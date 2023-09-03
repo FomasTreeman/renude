@@ -3,13 +3,13 @@ import { Pressable, View, StyleSheet } from "react-native";
 import { ThemeContext } from "../context/ThemeContext";
 import Text from "./Text";
 
-export default function Continue({ cb }: { cb: () => void }) {
+export default function Continue({ cb, isError = false }: { cb: () => void, isError?: boolean }) {
     const theme = useContext(ThemeContext)
     const [pressed, setPressed] = useState(false)
 
     const styles = StyleSheet.create({
         button: {
-            backgroundColor: pressed ? theme.colours.secondary.green : theme.colours.primary.green,
+            backgroundColor: isError ? 'red' : pressed ? theme.colours.secondary.green : theme.colours.primary.green,
             ...theme.shadow,
             ...theme.border,
             borderRadius: 50,

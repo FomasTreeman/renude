@@ -5,6 +5,7 @@ import { useSignUp } from '@clerk/clerk-expo';
 import Button from '../components/Button';
 import Text from '../components/Text';
 import Input from '../components/Input';
+import InputError from '../components/InputError';
 import Continue from '../components/Continue';
 
 export default function SignUp({ navigation }: any) {
@@ -39,10 +40,9 @@ export default function SignUp({ navigation }: any) {
       setPendingVerification(true);
       setErrors([])
     } catch (err: any) {
-      console.error(JSON.stringify(err, null, 2));
       const updatedErrors = errors
       err.errors.forEach((err: any) => updatedErrors[err.meta.paramName as keyof typeof errors] = err.longMessage);
-      setErrors(updatedErrors);
+      setErrors({ ...updatedErrors });
     }
   };
 
@@ -80,46 +80,41 @@ export default function SignUp({ navigation }: any) {
               <Text tag='h3' > Let's get you signed up </Text>
 
               <View className='mb-4 mx-3'>
-                <Input
+                <InputError
                   placeholder='Email'
                   type='email_address'
-                  state={emailAddress}
+                  value={emailAddress}
                   setState={setEmailAddress}
                   errors={errors}
                   setErrors={setErrors}
                 />
-                <Input
+                <InputError
                   placeholder='Username'
                   type='username'
-                  state={username}
+                  value={username}
                   setState={setUsername}
                   errors={errors}
                   setErrors={setErrors}
                 />
-                <Input
+                <InputError
                   placeholder='Password'
                   type='password'
-                  state={password}
+                  value={password}
                   setState={setPassword}
                   errors={errors}
                   setErrors={setErrors}
                 />
-                <View style={{ position: 'relative' }}>
-                  <View style={[theme.textInputLabel, { position: 'absolute', top: 16 }]} >
-                    <Text tag='body'>Re-enter Password</Text>
-                  </View>
-                  <TextInput
-                    style={{ ...theme.textInput, marginTop: 25, borderColor: isPasswordValid === false ? 'red' : 'black' }}
-                    autoCapitalize="none"
-                    placeholder=''
-                    secureTextEntry
-                    textContentType='password'
-                    onChangeText={(passwordToCompare: string) => passwordToCompare === password ? setIsPasswordValid(true) : setIsPasswordValid(false)}
-                  />
+                <Input
+                  placeholder='Re-enter Password'
+                  style={{ borderColor: isPasswordValid === false ? 'red' : 'black' }}
+                  secureTextEntry
+                  textContentType='password'
+                  cb={(passwordToCompare: string) => passwordToCompare === password ? setIsPasswordValid(true) : setIsPasswordValid(false)}
+                >
                   <View style={{ position: 'absolute', zIndex: 3, bottom: -22, left: 10 }}>
                     {isPasswordValid === false && <Text tag='error' textStyle='mt-2' style={{ color: 'red' }}> Doesn't match</Text>}
                   </View>
-                </View>
+                </Input>
               </View>
             </View>
 
