@@ -48,8 +48,9 @@ export default function Listing({ price, description, sold, image, height = 200,
             borderRadius: 15,
             borderBottomRightRadius: 0,
             borderBottomLeftRadius: 0,
-            ...theme.shadowLg,
             borderWidth: 3,
+            backgroundColor: 'white',
+            ...theme.shadowLg,
 
         },
         image: {
@@ -73,7 +74,8 @@ export default function Listing({ price, description, sold, image, height = 200,
             alignItems: 'center',
             padding: 5,
             borderWidth: 3,
-            marginLeft: -3
+            marginLeft: -3,
+            ...theme.shadowLg,
         },
     })
     return (

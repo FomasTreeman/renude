@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { Button, Image, Pressable, SafeAreaView } from 'react-native';
+import { FlatList, Image, Pressable, SafeAreaView, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import uuid from 'react-native-uuid';
+import * as FileSystem from 'expo-file-system';
+
 import Text from '../components/Text';
 import Input from '../components/Input';
 import Continue from '../components/Continue';
+import Button from '../components/Button';
 
 export default function ImagePickerExample() {
     const [images, setImages]: [images: string[], setImages: any] = useState([]);
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0.0)
 
-    const pickImage = async () => {
+    const pickImages = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -20,32 +24,88 @@ export default function ImagePickerExample() {
             quality: 1,
         });
 
-        // console.log(result);
-        if (!result.canceled) {
-            const assetUri = result.assets[0].uri;
-            if (images.includes(assetUri)) return;
-            setImages([...images, assetUri]);
-            // make request to express to upload to S3
-
-        }
+        if (result.canceled) return // else
+        let uris: string[] = []
+        result.assets.forEach(asset => {
+            const assetUri = asset.uri
+            if (!images.includes(assetUri)) uris.push(assetUri)
+        });
+        setImages([...uris]);
     };
 
     async function submitHandle() {
-        // upload to db
-    }
+        // ----------- upload to db -------------
+        if (!images) throw Error('Must include images')
+        if (!price) throw Error('Must include price')
 
+        // images
+        let fileNames: string[] = []
+
+        const formData = new FormData()
+        for (const imageUri of images) {
+            const filename = uuid.v4().toString() + imageUri.split('/').pop()
+            const file = await FileSystem.getInfoAsync(imageUri);
+
+            if (!file.exists) return
+            const fileData = await FileSystem.readAsStringAsync(imageUri, {
+                encoding: FileSystem.EncodingType.Base64,
+            });
+
+            formData.append('photos', {
+                uri: imageUri,
+                name: filename,
+                data: fileData,
+            } as any); //it works couldn't find solution
+            fileNames.push(filename)
+        }
+        try {
+            const res = await fetch('http://localhost:3001/upload', {
+                method: 'POST',
+                body: formData,
+
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+
+            })
+            console.log('🔥', await res.text())
+            // setImages([])
+        } catch (e) {
+            console.error(e)
+        }
+
+        // data
+        try {
+            // trpc post details
+        } catch (e) {
+            console.error(e)
+        }
+
+    }
     return (
         <SafeAreaView style={{ flex: 1, alignItems: 'flex-start', width: '100%', gap: 15 }}>
 
+
             {/* images */}
-            <Pressable onPress={pickImage} className='bg-slate-200 h-40 justify-center w-full'>
-                <Text tag='body' className='items-center' > Pick an image from camera roll </Text>
-            </Pressable>
             {/* give options to remove each image from the array. STRETCH -> change order */}
-            {images && images.map((image) => <Image key={Math.random()} source={{ uri: image }} style={{ width: 200, height: 200 }} />)}
+            {images && (
+                <FlatList
+                    style={{ backgroundColor: 'grey', maxHeight: 300, width: '100%', marginVertical: 15, paddingTop: 10 }}
+                    data={images}
+                    renderItem={(image) => (
+                        <Image key={Math.random()} source={{ uri: image.item }} style={{ width: '28.3%', height: 100, objectFit: 'contain', marginHorizontal: '2.5%', marginTop: 5 }} />
+                    )}
+                    numColumns={3}
+                    keyExtractor={(image) => image}
+                    ListFooterComponent={(
+                        <Button colour='orange' text='Pick an image from your camera roll' cb={pickImages} />
+                    )}
+                />
+            )
+            }
 
             {/* description */}
-            <Input
+            < Input
                 containerStyle={{ marginLeft: 25 }}
                 style={{ width: 200 }}
                 placeholder='Description'
@@ -61,7 +121,7 @@ export default function ImagePickerExample() {
                 inputMode='decimal'
                 keyboardType='number-pad'
                 maxLength={10}
-                value={price}
+                value={price.toString()}
                 cb={(value) => setPrice(value)}
             />
 

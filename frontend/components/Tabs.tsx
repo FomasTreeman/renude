@@ -49,10 +49,10 @@ export default function Tabs() {
     return (
         <Tab.Navigator screenOptions={{ tabBarStyle: style.navbar, headerShown: false }}>
             <Tab.Screen
-                name="Listings"
+                name="Home"
                 component={ListingsStackScreen}
                 options={{
-                    title: 'Listings',
+                    title: 'Home',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ focused, color, size }) => (
                         <Icon focused={focused} size={size} imageKey='listings' />

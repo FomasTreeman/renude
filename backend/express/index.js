@@ -25,25 +25,19 @@ const upload = multer({
   storage: multerS3({
     s3: S3,
     bucket: bucketName,
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req, file, cb) {
-      const key = `${req?.user || 'unknown'}/${
-        file.originalname
-      }/${Date.now().toString()}`;
-      cb(null, key);
-    },
   }),
 });
 
 app.post('/upload', upload.array('photos'), (req, res) => {
-  res.send('Successfully uploaded ' + req.files?.length + ' files!');
+  if (!req.files || req.files.length === 0)
+    return res.send('No images received');
+  res.send('Successfully uploaded ' + req.files.length + ' files!');
 });
 
 // for a given listing find all images in cloudflare storage and return to client
 app.get('/listing/images/:filename', async (req, res) => {
   // retrieve path/filename from query
+  console.log('Fetching images');
   const filename = req.params.filename;
 
   // returns a url for public access to object
@@ -52,7 +46,6 @@ app.get('/listing/images/:filename', async (req, res) => {
     new GetObjectCommand({ Bucket: bucketName, Key: filename }),
     { expiresIn: 3600 }
   );
-  console.log(`SignedUrl for ${filename}}`);
   res.send(url);
 });
 
