@@ -3,13 +3,18 @@ import { FlatList, Image, Pressable, SafeAreaView, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from 'react-native-uuid';
 import * as FileSystem from 'expo-file-system';
+import { trpc } from '../utils/trpc';
 
 import Text from '../components/Text';
 import Input from '../components/Input';
 import Continue from '../components/Continue';
 import Button from '../components/Button';
+import { useUser } from '@clerk/clerk-expo';
 
 export default function ImagePickerExample() {
+    const { user } = useUser()
+    const createListing = trpc.uploadListing.useMutation()
+
     const [images, setImages]: [images: string[], setImages: any] = useState([]);
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0.0)
@@ -74,9 +79,14 @@ export default function ImagePickerExample() {
             console.error(e)
         }
 
-        // data
         try {
             // trpc post details
+            const email = user?.primaryEmailAddress?.emailAddress
+            console.log(typeof price);
+            if (email) {
+                createListing.mutate({ email, price: price, images: fileNames, description })
+            }
+
         } catch (e) {
             console.error(e)
         }
@@ -121,8 +131,8 @@ export default function ImagePickerExample() {
                 inputMode='decimal'
                 keyboardType='number-pad'
                 maxLength={10}
-                value={price.toString()}
-                cb={(value) => setPrice(value)}
+                value={price}
+                cb={(value) => setPrice(parseFloat(value))}
             />
 
             {/* submit */}

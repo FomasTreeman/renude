@@ -15,11 +15,14 @@
   "license": "ISC",
   "devDependencies": {
     "@prisma/client": "^5.2.0",
-    "@types/node": "^20.5.7",
     "@trpc/server": "^10.38.1",
+    "@types/node": "^20.5.7",
     "nodemon": "^3.0.1",
     "prisma": "^5.2.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "zod": "^3.22.2"
   }
 }

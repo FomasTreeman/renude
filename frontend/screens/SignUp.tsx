@@ -1,7 +1,10 @@
 import { useState, useContext } from 'react';
-import { ThemeContext } from '../context/ThemeContext';
 import { View, TextInput, SafeAreaView, StyleProp } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
+
+import { ThemeContext } from '../context/ThemeContext';
+import { trpc } from '../utils/trpc';
+
 import Button from '../components/Button';
 import Text from '../components/Text';
 import Input from '../components/Input';
@@ -11,6 +14,7 @@ import Continue from '../components/Continue';
 export default function SignUp({ navigation }: any) {
   const theme = useContext(ThemeContext)
   const { isLoaded, signUp, setActive } = useSignUp();
+  const createUser = trpc.createUser.useMutation()
 
   const [emailAddress, setEmailAddress] = useState('');
   const [username, setUsername] = useState('');
@@ -54,7 +58,8 @@ export default function SignUp({ navigation }: any) {
       const completeSignUp = await signUp.attemptEmailAddressVerification({
         code,
       });
-      console.log(completeSignUp);
+
+      createUser.mutate({ email: emailAddress })
       await setActive({ session: completeSignUp.createdSessionId });
       navigation.navigate('Home');
     } catch (err: any) {
