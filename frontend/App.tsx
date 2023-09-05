@@ -1,5 +1,3 @@
-// @ts-ignore
-import { CLERK_PUBLISHABLE_KEY } from '@env';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import { trpc } from './utils/trpc';
@@ -58,7 +56,7 @@ const App = () => {
     <ThemeContext.Provider value={theme}>
       <ClerkProvider
         tokenCache={tokenCache}
-        publishableKey={CLERK_PUBLISHABLE_KEY}
+        publishableKey={process.env.CLERK_PUBLISHABLE_KEY as string}
       >
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>

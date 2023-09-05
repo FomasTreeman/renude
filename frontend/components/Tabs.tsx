@@ -54,7 +54,7 @@ export default function Tabs() {
                 options={{
                     title: 'Home',
                     tabBarShowLabel: false,
-                    tabBarIcon: ({ focused, color, size }) => (
+                    tabBarIcon: ({ focused, size }) => (
                         <Icon focused={focused} size={size} imageKey='listings' />
                     )
                 }}
@@ -64,7 +64,7 @@ export default function Tabs() {
                 component={Search}
                 options={{
                     title: 'Search', tabBarShowLabel: false,
-                    tabBarIcon: ({ focused, color, size }) => (
+                    tabBarIcon: ({ focused, size }) => (
                         <Icon focused={focused} size={size} imageKey='search' />
                     ),
                 }}
@@ -75,7 +75,7 @@ export default function Tabs() {
                 options={{
                     title: 'Upload listing',
                     tabBarShowLabel: false,
-                    tabBarIcon: ({ focused, color, size }) => (
+                    tabBarIcon: ({ focused, size }) => (
                         <Icon focused={focused} size={size} imageKey='upload' />
                     ),
                 }}
@@ -85,7 +85,7 @@ export default function Tabs() {
                 component={Account}
                 options={{
                     title: 'Account', tabBarShowLabel: false,
-                    tabBarIcon: ({ focused, color, size }) => (
+                    tabBarIcon: ({ focused, size }) => (
                         <Icon focused={focused} size={size} imageKey='account' />
                     ),
                 }}

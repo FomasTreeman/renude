@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { View, TextInput, SafeAreaView, StyleProp } from 'react-native';
+import { View, TextInput, SafeAreaView } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 
 import { ThemeContext } from '../context/ThemeContext';
@@ -27,8 +27,8 @@ export default function SignUp({ navigation }: any) {
   // start the sign up process.
   const onSignUpPress = async () => {
     console.log('🔥 sign up pressed and isLoaded: ', isLoaded);
-    // if (!isLoaded || !isPasswordValid || !password || !emailAddress) return;
-    if (!isLoaded) return;
+    if (!isLoaded || !isPasswordValid || !password || !emailAddress) return;
+    // if (!isLoaded) return;
 
     try {
       await signUp.create({
@@ -67,7 +67,6 @@ export default function SignUp({ navigation }: any) {
     }
   };
 
-  console.log(errors)
   return (
     <>
       {!pendingVerification ? (

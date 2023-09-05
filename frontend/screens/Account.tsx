@@ -6,12 +6,10 @@ import { trpc } from '../utils/trpc';
 import Button from '../components/Button';
 import Text from '../components/Text';
 import Listing from '../components/Listing';
-import { useEffect } from 'react';
 
 export default function Account() {
     const { signOut } = useAuth();
     const { user } = useUser()
-
 
     if (!user) return null
     const listingsQuery = trpc.usersListings.useQuery(user.emailAddresses[0].emailAddress)

@@ -20,19 +20,17 @@ const SIZES = {
     lg: 0.4
 }
 
-export default function Listing({ price, description, sold, image, height = 200, width = 250, footerSize = 'sm' }: IListingProps) {
+export default function Listing({ price, description, image, height = 200, width = 250, footerSize = 'sm' }: IListingProps) {
     const theme = useContext(ThemeContext)
     const [url, setUrl] = useState('')
 
     useEffect(() => {
         async function getUrl() {
             if (image.length === 0) return // can be removed once enforced 
-            console.log(image[0].path)
             try {
                 const response = await fetch(
                     `http://localhost:3001/listing/images/${image[0].path}`,
                 );
-                // console.log(response)
                 const urlRes = await response.text();
                 setUrl(urlRes)
             } catch (error) {
@@ -41,7 +39,6 @@ export default function Listing({ price, description, sold, image, height = 200,
         }
         getUrl()
     }, [])
-    // if (!url.includes('bulksplash')) console.log('😀 ', url)
 
     const styles = StyleSheet.create({
         container: {
@@ -53,7 +50,7 @@ export default function Listing({ price, description, sold, image, height = 200,
             borderBottomRightRadius: 0,
             borderBottomLeftRadius: 0,
             borderWidth: 3,
-            backgroundColor: 'white',
+            backgroundColor: '#FFF',
             ...theme.shadowLg,
 
         },
@@ -64,12 +61,12 @@ export default function Listing({ price, description, sold, image, height = 200,
             justifyContent: 'center',
             borderTopLeftRadius: 12,
             borderTopRightRadius: 12,
-            backgroundColor: 'black',
+            backgroundColor: '#000',
         },
         footer: {
             height: height * SIZES[footerSize],
             width: width + 6,
-            backgroundColor: 'white',
+            backgroundColor: '#fff',
             borderBottomLeftRadius: 13,
             borderBottomRightRadius: 13,
             display: 'flex',
