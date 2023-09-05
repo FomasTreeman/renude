@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const locations = [
-    { lat: 51.509865, lng: -0.118092 }, // lngdon
+    { lat: 51.509865, lng: -0.118092 }, // london
     { lat: 51.752022, lng: -1.257677 }, // Oxford
     { lat: 51.454514, lng: -2.587910 }, // Bristol
     { lat: 51.454818, lng: -0.973234 }, // Reading
@@ -81,7 +81,7 @@ async function seedData() {
 
     console.log('Created users')
 
-    // Create Listings, Favorites, and Ratings for each user
+    // Create Listings, Favourites, and Ratings for each user
     let filenameCounter = 0
     for (const user of users) {
         for (let i = 0; i < 10; i++) {
@@ -96,7 +96,7 @@ async function seedData() {
                 id: true,
             },
         })) {
-            // Create Favorites
+            // Create Favourites
             await prisma.favourite.create({
                 data: {
                     userId: user.id,

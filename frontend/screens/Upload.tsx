@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FlatList, Image, SafeAreaView, ActivityIndicator, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import uuid from 'react-native-uuid';
 import * as FileSystem from 'expo-file-system';
 import { trpc } from '../utils/trpc';
 
@@ -25,7 +24,7 @@ export default function Upload({ navigation }: any) {
 
     const pickImages = async () => {
         // No permissions request is necessary for launching the image library
-        let result = await ImagePicker.launchImageLibraryAsync({
+        const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsMultipleSelection: true,
             selectionLimit: 5,
@@ -34,7 +33,7 @@ export default function Upload({ navigation }: any) {
         });
 
         if (result.canceled) return // else
-        let uris: string[] = []
+        const uris: string[] = []
         result.assets.forEach(asset => {
             const assetUri = asset.uri
             if (!images.includes(assetUri)) uris.push(assetUri)
@@ -49,10 +48,10 @@ export default function Upload({ navigation }: any) {
         if (!price) throw Error('Must include price')
 
         // images
-        let fileNames: string[] = []
+        const fileNames: string[] = []
 
         for (const imageUri of images) {
-            const fileName = uuid.v4().toString() + imageUri.split('/').at(-1)
+            const fileName = imageUri.split('/').at(-1) as string
 
             try {
                 const response = await FileSystem.uploadAsync(`http://localhost:3001/upload?name=${fileName}`, imageUri, {

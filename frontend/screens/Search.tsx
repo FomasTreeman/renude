@@ -1,10 +1,8 @@
 import { FlatList, View, SafeAreaView, StyleSheet, TextInput } from "react-native";
 import { trpc } from '../utils/trpc';
 
-import Input from "../components/Input";
 import Continue from "../components/Continue";
 import Button from "../components/Button";
-import Text from "../components/Text";
 import Listing from "../components/Listing";
 
 export default function Search() {

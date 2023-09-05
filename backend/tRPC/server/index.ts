@@ -47,7 +47,7 @@ const appRouter = router({
       }
     });
   }),
-  usersListings: publicProcedure.input(String).query(async ({ input }) => {
+  usersListings: publicProcedure.input(z.string()).query(async ({ input }) => {
     const res = await db.listing.findMany({
       where: {
         user: {
@@ -94,7 +94,57 @@ const appRouter = router({
       } catch (e) {
         console.error(e)
       }
-    })
+    }),
+  updateListing: publicProcedure
+    .input(z.object(
+      {
+        id: z.number(),
+        description: z.string().optional(),
+        price: z.number().optional(),
+        sold: z.boolean().optional(),
+      }
+    ))
+    .mutation(async ({ input }) => {
+      try {
+        await db.listing.update({
+          where: {
+            id: input.id
+          },
+          data: { // undefined does nothing to the field
+            description: input?.description,
+            price: input?.price,
+            sold: input?.sold,
+          }
+        })
+        return 'Successfully deleted listing'
+      } catch (e) {
+        console.error(e)
+      }
+    }),
+  deleteListing: publicProcedure.input(z.number()).mutation(async ({ input }) => {
+    try {
+      await db.listing.delete({
+        where: {
+          id: input
+        }
+      })
+      return 'Successfully deleted listing'
+    } catch (e) {
+      console.error(e)
+    }
+  }),
+  deleteImageFromListing: publicProcedure.input(z.number()).mutation(async ({ input }) => {
+    try {
+      await db.image.delete({
+        where: {
+          id: input
+        }
+      })
+      return 'Successfully deleted image'
+    } catch (e) {
+      console.error(e)
+    }
+  })
 });
 
 
