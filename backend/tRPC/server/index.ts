@@ -52,7 +52,7 @@ const appRouter = router({
       where: {
         user: {
           // email: opts.input 
-          id: 1 // test purposes
+          id: 16 // test purposes
         }
       },
       include: {
@@ -75,20 +75,25 @@ const appRouter = router({
     })
   )
     .mutation(async ({ input }) => {
-      await db.listing.create({
-        data: {
-          user: {
-            connect: {
-              id: await getUserIdByEmail(input.email) // not optimal :/ could use context but does similar thing by looks of it?
-            }
+      try {
+        await db.listing.create({
+          data: {
+            user: {
+              connect: {
+                id: await getUserIdByEmail(input.email) // not optimal :/ could use context but does similar thing by looks of it?
+              }
+            },
+            price: input.price,
+            description: input?.description,
+            image: {
+              create: input.images.map((filename) => ({ path: filename })),
+            },
           },
-          price: input.price,
-          description: input?.description,
-          image: {
-            create: input.images.map((filename) => ({ path: filename })),
-          },
-        },
-      })
+        })
+        return 'Success'
+      } catch (e) {
+        console.error(e)
+      }
     })
 });
 

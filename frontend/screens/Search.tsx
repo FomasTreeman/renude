@@ -21,7 +21,7 @@ export default function Search() {
                 <Button colour="purple" text='shoes' cb={() => { }} />
             </View>
             <FlatList
-                style={{ marginTop: 20 }}
+                style={{ height: '80%' }}
                 data={listingsQuery.data}
                 renderItem={({ item }) => <Listing {...item} height={100} width={150} footerSize='lg' />}
                 keyExtractor={item => `ListEntry-${item.createdAt}`}

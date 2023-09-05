@@ -30,7 +30,7 @@ const Listings = () => {
           <FlatList
             data={listingsQuery.data}
             renderItem={({ item }) => <Listing {...item} />}
-            keyExtractor={item => `ListEntry-${item.createdAt}`}
+            keyExtractor={(item, index) => `SuggestionsListEntry-${index}-${item.createdAt}`}
             horizontal
           />
         </View>
@@ -39,7 +39,7 @@ const Listings = () => {
           <FlatList
             data={listingsQuery.data}
             renderItem={({ item }) => <Listing {...item} />}
-            keyExtractor={item => `ListEntry-${item.createdAt}`}
+            keyExtractor={(item, index) => `FavouritesListEntry-${index}-${item.createdAt}`}
             horizontal
           />
         </View>
@@ -48,7 +48,7 @@ const Listings = () => {
           <FlatList
             data={listingsQuery.data}
             renderItem={({ item }) => <Listing {...item} />}
-            keyExtractor={item => `ListEntry-${item.createdAt}`}
+            keyExtractor={(item, index) => `FollowersListEntry-${index}-${item.createdAt}`}
             horizontal
           />
         </View>
