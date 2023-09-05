@@ -62,7 +62,7 @@ export default function SignUp({ navigation }: any) {
       createUser.mutate({ email: emailAddress })
       await setActive({ session: completeSignUp.createdSessionId });
       navigation.navigate('Home');
-    } catch (err: any) {
+    } catch (err) {
       console.error(JSON.stringify(err, null, 2));
     }
   };
