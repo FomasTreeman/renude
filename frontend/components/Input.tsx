@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { StyleSheet, TextInput, TextStyle, View, ViewStyle } from 'react-native';
-import { StyledProps } from 'nativewind';
 
 import { ThemeContext } from '../context/ThemeContext';
 

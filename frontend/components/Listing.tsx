@@ -1,8 +1,10 @@
-import { Image } from "expo-image"
-import Text from "./Text"
-import { StyleSheet, View } from "react-native"
 import { useContext, useEffect, useState } from "react"
+import { StyleSheet, View } from "react-native"
+import { Image } from "expo-image"
+
 import { ThemeContext } from "../context/ThemeContext"
+
+import Text from "./Text"
 
 interface IListingProps {
     price: number,

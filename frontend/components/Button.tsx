@@ -1,9 +1,11 @@
 import { useContext } from "react"
-import { Pressable, StyleSheet, View } from "react-native"
+import { Pressable, StyleSheet } from "react-native"
+
 import { ThemeContext } from "../context/ThemeContext"
+
 import Text from "./Text"
 
-export default function button({ colour, text, cb }: { colour: 'green' | 'purple' | 'orange' | 'yellow', text: String, cb: () => void }) {
+export default function button({ colour, text, cb }: { colour: 'green' | 'purple' | 'orange' | 'yellow', text: string, cb: () => void }) {
     const theme = useContext(ThemeContext)
 
     const styles = StyleSheet.create({
@@ -21,7 +23,7 @@ export default function button({ colour, text, cb }: { colour: 'green' | 'purple
         }
     })
     return (
-        <Pressable style={styles.button} onPress={cb}>
+        <Pressable data-testid='button' style={styles.button} onPress={cb}>
             <Text tag='h4'> {text} </Text>
         </Pressable>
     )

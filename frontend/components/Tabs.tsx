@@ -15,12 +15,13 @@ import Search from '../screens/Search';
 const Tab = createBottomTabNavigator()
 const ListingsStack = createNativeStackNavigator();
 
-const images = {
-    account: require('../assets/account.svg'),
-    search: require('../assets/search.svg'),
-    upload: require('../assets/upload.svg'),
-    listings: require('../assets/listings.svg'),
+const SCREENS = {
+    Home: { component: ListingsStackScreen, image: require('../assets/listings.svg') },
+    Search: { component: Search, image: require('../assets/search.svg') },
+    Upload: { component: Upload, image: require('../assets/upload.svg') },
+    Account: { component: Account, image: require('../assets/account.svg') }
 }
+
 
 function ListingsStackScreen() {
     return (
@@ -48,54 +49,26 @@ export default function Tabs() {
 
     return (
         <Tab.Navigator screenOptions={{ tabBarStyle: style.navbar, headerShown: false }}>
-            <Tab.Screen
-                name="Home"
-                component={ListingsStackScreen}
-                options={{
-                    title: 'Home',
-                    tabBarShowLabel: false,
-                    tabBarIcon: ({ focused, size }) => (
-                        <Icon focused={focused} size={size} imageKey='listings' />
-                    )
-                }}
-            />
-            <Tab.Screen
-                name="Search"
-                component={Search}
-                options={{
-                    title: 'Search', tabBarShowLabel: false,
-                    tabBarIcon: ({ focused, size }) => (
-                        <Icon focused={focused} size={size} imageKey='search' />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Upload"
-                component={Upload}
-                options={{
-                    title: 'Upload listing',
-                    tabBarShowLabel: false,
-                    tabBarIcon: ({ focused, size }) => (
-                        <Icon focused={focused} size={size} imageKey='upload' />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Account"
-                component={Account}
-                options={{
-                    title: 'Account', tabBarShowLabel: false,
-                    tabBarIcon: ({ focused, size }) => (
-                        <Icon focused={focused} size={size} imageKey='account' />
-                    ),
-                }}
-            />
+            {Object.entries(SCREENS).map(([key, { component }]) => (
+                <Tab.Screen
+                    key={key}
+                    name={key}
+                    component={component}
+                    options={{
+                        title: key,
+                        tabBarShowLabel: false,
+                        tabBarIcon: ({ focused, size }) => (
+                            <Icon focused={focused} size={size} imageKey={key as keyof typeof SCREENS} />
+                        )
+                    }}
+                />
+            ))}
         </Tab.Navigator >
 
     )
 }
 
-const Icon = ({ focused, size, imageKey }: { focused: boolean, size: number, imageKey: keyof typeof images }) => {
+const Icon = ({ focused, size, imageKey }: { focused: boolean, size: number, imageKey: keyof typeof SCREENS }) => {
     const theme = useContext(ThemeContext);
     const styles = StyleSheet.create({
         icon: {
@@ -114,7 +87,7 @@ const Icon = ({ focused, size, imageKey }: { focused: boolean, size: number, ima
 
     return (
         <View style={focused ? { ...styles.icon, ...styles.iconHover } : { ...styles.icon }}>
-            <Image source={images[imageKey]} style={{ width: size, height: size }} />
+            <Image source={SCREENS[imageKey].image} style={{ width: size, height: size }} />
         </View>
     )
 }

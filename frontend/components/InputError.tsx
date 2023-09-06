@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+
 import Text from './Text';
 import Input from './Input';
 

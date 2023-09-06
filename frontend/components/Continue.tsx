@@ -1,6 +1,8 @@
 import { useContext, useState } from "react";
-import { Pressable, View, StyleSheet, ViewStyle } from "react-native";
+import { Pressable, StyleSheet, ViewStyle } from "react-native";
+
 import { ThemeContext } from "../context/ThemeContext";
+
 import Text from "./Text";
 
 export default function Continue({ cb, style, isError = false }: { cb: () => void, style?: ViewStyle, isError?: boolean }) {

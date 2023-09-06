@@ -51,9 +51,8 @@ export default function Upload({ navigation }: any) {
         const fileNames: string[] = []
 
         for (const imageUri of images) {
-            const fileName = imageUri.split('/').at(-1) as string
-
             try {
+                const fileName = imageUri.split('/').at(-1) as string
                 const response = await FileSystem.uploadAsync(`http://localhost:3001/upload?name=${fileName}`, imageUri, {
                     fieldName: 'photos',
                     httpMethod: 'POST',
