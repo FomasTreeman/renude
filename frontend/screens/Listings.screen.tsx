@@ -1,14 +1,12 @@
 import { SafeAreaView, View, Pressable, FlatList, ScrollView } from 'react-native';
-// import { useUser } from '@clerk/clerk-expo';
-import { useContext, useEffect } from 'react';
-import { ThemeContext } from '../context/ThemeContext';
 import Text from '../components/Text';
 import Listing from '../components/Listing';
 import { trpc } from '../utils/trpc';
 
 const Listings = () => {
-  const theme = useContext(ThemeContext)
-  const listingsQuery = trpc.usersListings.useQuery()
+  const suggestionsListingsQuery = trpc.usersListings.useQuery(1)
+  const favouritesListingsQuery = trpc.usersListings.useQuery(2)
+  const followersListingsQuery = trpc.usersListings.useQuery(3)
 
   return (
     <SafeAreaView>
@@ -28,8 +26,8 @@ const Listings = () => {
             </Pressable>
           </View>
           <FlatList
-            data={listingsQuery.data}
-            renderItem={({ item }) => <Listing {...item} />}
+            data={suggestionsListingsQuery.data}
+            renderItem={({ item }) => <Listing listing={item} previousScreen='Listings' />}
             keyExtractor={(item, index) => `SuggestionsListEntry-${index}-${item.createdAt}`}
             horizontal
           />
@@ -37,8 +35,8 @@ const Listings = () => {
         <View>
           <Text tag='h3' textStyle='mt-5' > Favourites </Text>
           <FlatList
-            data={listingsQuery.data}
-            renderItem={({ item }) => <Listing {...item} />}
+            data={favouritesListingsQuery.data}
+            renderItem={({ item }) => <Listing listing={item} previousScreen='Listings' />}
             keyExtractor={(item, index) => `FavouritesListEntry-${index}-${item.createdAt}`}
             horizontal
           />
@@ -46,8 +44,8 @@ const Listings = () => {
         <Text tag='h3' textStyle='mt-5' > Follower Posts </Text>
         <View>
           <FlatList
-            data={listingsQuery.data}
-            renderItem={({ item }) => <Listing {...item} />}
+            data={followersListingsQuery.data}
+            renderItem={({ item }) => <Listing listing={item} previousScreen='Listings' />}
             keyExtractor={(item, index) => `FollowersListEntry-${index}-${item.createdAt}`}
             horizontal
           />

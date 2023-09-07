@@ -1,5 +1,7 @@
+/* eslint-disable react-native/no-color-literals */ // temp
 import { useContext, useEffect, useState } from "react"
-import { StyleSheet, View } from "react-native"
+import { Pressable, StyleSheet, View } from "react-native"
+import { NavigationContext } from '@react-navigation/native';
 import { Image } from "expo-image"
 
 import { ThemeContext } from "../context/ThemeContext"
@@ -7,10 +9,13 @@ import { ThemeContext } from "../context/ThemeContext"
 import Text from "./Text"
 
 interface IListingProps {
-    price: number,
-    description: string | null,
-    sold?: boolean,
-    image: { path: string }[],
+    listing: { // get listing type
+        price: number,
+        description: string | null,
+        sold?: boolean,
+        image: { path: string }[],
+    },
+    previousScreen?: string,
     height?: number,
     width?: number,
     footerSize?: 'sm' | 'md' | 'lg'
@@ -22,16 +27,18 @@ const SIZES = {
     lg: 0.4
 }
 
-export default function Listing({ price, description, image, height = 200, width = 250, footerSize = 'sm' }: IListingProps) {
+export default function Listing({ listing, previousScreen, height = 200, width = 250, footerSize = 'sm' }: IListingProps) {
     const theme = useContext(ThemeContext)
+    const navigation = useContext(NavigationContext);
+
     const [url, setUrl] = useState('')
 
     useEffect(() => {
         async function getUrl() {
-            if (image.length === 0) return // can be removed once enforced 
+            if (listing.image.length === 0) return // can be removed once enforced 
             try {
                 const response = await fetch(
-                    `http://localhost:3001/listing/images/${image[0].path}`,
+                    `http://localhost:3001/listing/images/${listing.image[0].path}`,
                 );
                 const urlRes = await response.text();
                 setUrl(urlRes)
@@ -83,17 +90,17 @@ export default function Listing({ price, description, image, height = 200, width
     })
     return (
         // 3 for border, 8 for shadow, 9 for scroll bar
-        <View style={{ height: height + (height * SIZES[footerSize]) + 3 + 8 + 9, marginTop: 15 }}>
+        <Pressable onPress={() => previousScreen && navigation?.navigate('Listing', { listing, previousScreen })} style={{ height: height + (height * SIZES[footerSize]) + 3 + 8 + 9, marginTop: 15 }}>
             <View style={styles.container}>
                 <Image testID='listing-image' source={url} style={styles.image} />
                 <View style={styles.footer}>
-                    {description ?
-                        <Text tag='body' style={{ maxWidth: width / 3 }}> {description}</Text>
+                    {listing.description ?
+                        <Text tag='body' style={{ maxWidth: width / 3 }}> {listing.description}</Text>
                         : null
                     }
-                    <Text tag='h4' >£{price.toString()} </Text>
+                    <Text tag='h4' >£{listing.price.toString()} </Text>
                 </View>
             </View>
-        </View>
+        </Pressable>
     )
 }

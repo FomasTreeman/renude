@@ -47,12 +47,12 @@ const appRouter = router({
       }
     });
   }),
-  usersListings: publicProcedure.input(z.string()).query(async ({ input }) => {
+  usersListings: publicProcedure.input(z.number()).query(async ({ input }) => {
     const res = await db.listing.findMany({
       where: {
         user: {
           // email: opts.input 
-          id: 16 // test purposes
+          id: input
         }
       },
       include: {

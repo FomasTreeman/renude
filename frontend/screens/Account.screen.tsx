@@ -7,18 +7,20 @@ import Button from '../components/Button';
 import Text from '../components/Text';
 import Listing from '../components/Listing';
 
+
 export default function Account() {
     const { signOut } = useAuth();
     const { user } = useUser()
 
     if (!user) return null
-    const listingsQuery = trpc.usersListings.useQuery(user.emailAddresses[0].emailAddress)
+    // user.emailAddresses[0].emailAddress
+    const listingsQuery = trpc.usersListings.useQuery(16)
 
     return (
         <SafeAreaView className='mx-1'>
             <FlatList
                 data={listingsQuery.data}
-                renderItem={({ item }) => <Listing {...item} height={100} width={150} footerSize='lg' />}
+                renderItem={({ item }) => <Listing listing={item} previousScreen='Account' height={100} width={150} footerSize='lg' />}
                 numColumns={2}
                 keyExtractor={(item, index) => `ListEntry-${index}-${item.createdAt}`}
                 ListHeaderComponent={

@@ -14,21 +14,31 @@ import Search from '../screens/Search';
 
 const Tab = createBottomTabNavigator()
 const ListingsStack = createNativeStackNavigator();
+const SearchStack = createNativeStackNavigator();
 
 const SCREENS = {
-    Home: { component: ListingsStackScreen, image: require('../assets/listings.svg') },
-    Search: { component: Search, image: require('../assets/search.svg') },
+    HomeTabs: { component: ListingsTabs, image: require('../assets/listings.svg') },
+    SearchTabs: { component: SearchTabs, image: require('../assets/search.svg') },
     Upload: { component: Upload, image: require('../assets/upload.svg') },
     Account: { component: Account, image: require('../assets/account.svg') }
 }
 
 
-function ListingsStackScreen() {
+function ListingsTabs() {
     return (
         <ListingsStack.Navigator screenOptions={{ headerShown: false }}>
             <ListingsStack.Screen name="Listings" component={Listings} />
             <ListingsStack.Screen name="Listing" component={Listing} />
         </ListingsStack.Navigator >
+    )
+}
+
+function SearchTabs() {
+    return (
+        <SearchStack.Navigator screenOptions={{ headerShown: false }}>
+            <ListingsStack.Screen name="Search" component={Search} />
+            <ListingsStack.Screen name="Listing" component={Listing} />
+        </SearchStack.Navigator >
     )
 }
 

@@ -21,7 +21,7 @@ export default function Search() {
             <FlatList
                 style={{ height: '80%' }}
                 data={listingsQuery.data}
-                renderItem={({ item }) => <Listing {...item} height={100} width={150} footerSize='lg' />}
+                renderItem={({ item }) => <Listing listing={item} previousScreen='Search' height={100} width={150} footerSize='lg' />}
                 keyExtractor={item => `ListEntry-${item.createdAt}`}
                 numColumns={2}
             />

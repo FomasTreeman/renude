@@ -1,15 +1,18 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { httpBatchLink } from '@trpc/client';
-import { trpc } from './utils/trpc';
-import React, { useState } from 'react';
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import * as SecureStore from 'expo-secure-store';
+import React, { useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { NavigationContainer } from '@react-navigation/native';
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
+import { useFonts } from 'expo-font';
+import { httpBatchLink } from '@trpc/client';
+
 import { ThemeContext } from './context/ThemeContext';
 import { theme } from './theme'
-import { useFonts } from 'expo-font';
+
+import { trpc } from './utils/trpc';
+
 import TabNavigator from './components/Tabs';
 import AuthNavigator from './components/AuthNavigator';
-import { NavigationContainer } from '@react-navigation/native';
 
 const tokenCache = {
   async getToken(key: string) {
@@ -51,12 +54,11 @@ const App = () => {
     return null;
   }
 
-
   return (
     <ThemeContext.Provider value={theme}>
       <ClerkProvider
         tokenCache={tokenCache}
-        publishableKey={process.env.CLERK_PUBLISHABLE_KEY as string}
+        publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string}
       >
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
