@@ -6,9 +6,8 @@ describe('Continue Component', () => {
     it('calls the callback function when pressed', () => {
         const mockCallback = jest.fn();
         const { getByText } = render(<Continue cb={mockCallback} />);
-        const button = getByText('Test Button');
+        const button = getByText('→');
         fireEvent.press(button);
         expect(mockCallback).toHaveBeenCalledTimes(1);
     });
-    // isError arg
 });

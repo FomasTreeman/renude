@@ -50,6 +50,7 @@ export default function Input({ children, placeholder, cb, style, containerStyle
                 <Text tag='body'>{placeholder}</Text>
             </View>
             <TextInput
+                testID={`input`}
                 style={{ ...styles.textInput, ...style }}
                 autoCapitalize="none"
                 onChangeText={cb}

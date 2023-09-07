@@ -9,8 +9,8 @@ import Text from "./Text"
 interface IListingProps {
     price: number,
     description: string | null,
-    sold: boolean,
-    image: any,
+    sold?: boolean,
+    image: { path: string }[],
     height?: number,
     width?: number,
     footerSize?: 'sm' | 'md' | 'lg'
@@ -85,7 +85,7 @@ export default function Listing({ price, description, image, height = 200, width
         // 3 for border, 8 for shadow, 9 for scroll bar
         <View style={{ height: height + (height * SIZES[footerSize]) + 3 + 8 + 9, marginTop: 15 }}>
             <View style={styles.container}>
-                <Image source={url} style={styles.image} />
+                <Image testID='listing-image' source={url} style={styles.image} />
                 <View style={styles.footer}>
                     {description ?
                         <Text tag='body' style={{ maxWidth: width / 3 }}> {description}</Text>

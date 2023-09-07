@@ -23,7 +23,7 @@ export default function button({ colour, text, cb }: { colour: 'green' | 'purple
         }
     })
     return (
-        <Pressable data-testid='button' style={styles.button} onPress={cb}>
+        <Pressable testID='button' style={styles.button} onPress={cb}>
             <Text tag='h4'> {text} </Text>
         </Pressable>
     )
