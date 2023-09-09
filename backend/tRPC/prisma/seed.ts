@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from "../server/db";
 
 const locations = [
     { lat: 51.509865, lng: -0.118092 }, // london

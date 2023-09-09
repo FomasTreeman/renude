@@ -61,7 +61,6 @@ export default function Listing({ listing, previousScreen, height = 200, width =
             borderWidth: 3,
             backgroundColor: '#FFF',
             ...theme.shadowLg,
-
         },
         image: {
             height: height * 1 - SIZES[footerSize],

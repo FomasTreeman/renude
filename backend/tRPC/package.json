@@ -23,6 +23,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "stripe": "^13.5.0",
     "zod": "^3.22.2"
   }
 }

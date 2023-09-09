@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { FlatList, Image, SafeAreaView, ActivityIndicator, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import { useUser } from '@clerk/clerk-expo';
 import { trpc } from '../utils/trpc';
 
 import Input from '../components/Input';
 import Continue from '../components/Continue';
 import Button from '../components/Button';
-import { useUser } from '@clerk/clerk-expo';
 
 export default function Upload({ navigation }: any) {
     const { user } = useUser()

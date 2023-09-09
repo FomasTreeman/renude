@@ -6,15 +6,16 @@ import { trpc } from '../utils/trpc';
 import Button from '../components/Button';
 import Text from '../components/Text';
 import Listing from '../components/Listing';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function Account() {
     const { signOut } = useAuth();
     const { user } = useUser()
+    const navigation = useNavigation()
 
     if (!user) return null
-    // user.emailAddresses[0].emailAddress
-    const listingsQuery = trpc.usersListings.useQuery(16)
+    const listingsQuery = trpc.usersListings.useQuery(user.emailAddresses[0].emailAddress)
 
     return (
         <SafeAreaView className='mx-1'>
@@ -30,6 +31,11 @@ export default function Account() {
                             colour='purple'
                             text="Sign Out"
                             cb={signOut}
+                        />
+                        <Button
+                            colour='green'
+                            text='offers'
+                            cb={() => { navigation.navigate('Offers' as never) }}
                         />
                     </View>
                 }

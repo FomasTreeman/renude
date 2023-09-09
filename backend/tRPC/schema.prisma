@@ -1,5 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
 model Listing {
   id          Int         @id @default(autoincrement())
   createdAt   DateTime    @default(now())
@@ -8,17 +16,43 @@ model Listing {
   sold        Boolean     @default(false)
   userId      Int
   user        User        @relation(fields: [userId], references: [id])
-  image       Image[] // one-to-many relation
-  favourite   Favourite[] // one-to-many relation
+  image       Image[]
+  favourite   Favourite[]
+  offer       Offer[]
+  order       Order[]
 
   @@index([userId])
+}
+
+model Offer {
+  id        Int      @id @default(autoincrement())
+  price     Int
+  accepted  Boolean?
+  userId    Int
+  listingId Int
+  user      User     @relation(fields: [userId], references: [id])
+  listing   Listing  @relation(fields: [listingId], references: [id])
+
+  @@index([userId])
+  @@index([listingId])
+}
+
+model Order {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  listingId Int
+  user      User    @relation(fields: [userId], references: [id])
+  listing   Listing @relation(fields: [listingId], references: [id])
+
+  @@index([userId])
+  @@index([listingId])
 }
 
 model Image {
   id        Int     @id @default(autoincrement())
   path      String
   listingId Int
-  lsiting   Listing @relation(fields: [listingId], references: [id])
+  listing   Listing @relation(fields: [listingId], references: [id])
 
   @@index([listingId])
 }
@@ -37,10 +71,10 @@ model Favourite {
 model Rating {
   id     Int  @id @default(autoincrement())
   rating Int
-  tx     User @relation("tx", fields: [rxId], references: [id])
   txId   Int
-  rx     User @relation("rx", fields: [txId], references: [id])
   rxId   Int
+  tx     User @relation("tx", fields: [rxId], references: [id])
+  rx     User @relation("rx", fields: [txId], references: [id])
 
   @@index([txId])
   @@index([rxId])
@@ -51,18 +85,10 @@ model User {
   email     String      @unique
   lng       Float?
   lat       Float?
-  listing   Listing[] // one-to-many relation
-  favourite Favourite[] // one-to-many relation
-  ratingRx  Rating[]    @relation("rx") // one-to-many relation
-  ratingTx  Rating[]    @relation("tx") // one-to-many relation
-}
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  listing   Listing[]
+  favourite Favourite[]
+  ratingRx  Rating[]    @relation("rx")
+  ratingTx  Rating[]    @relation("tx")
+  Order     Order[]
+  Offer     Offer[]
 }

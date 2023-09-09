@@ -12,7 +12,7 @@ describe("Listing component", () => {
     };
 
     beforeEach(() => {
-        listingComponent = render(<Listing {...mockListingProps} />);
+        listingComponent = render(<Listing listing={mockListingProps} />);
     });
 
     it("displays the correct price", () => {

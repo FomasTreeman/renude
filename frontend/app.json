@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "renude-test",
-    "slug": "renude-test",
+    "name": "renude",
+    "slug": "renude",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,6 +12,9 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
+    "expo": {
+      "scheme": "renude"
+    },
     "ios": {
       "supportsTablet": true
     },

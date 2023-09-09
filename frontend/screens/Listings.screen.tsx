@@ -4,9 +4,9 @@ import Listing from '../components/Listing';
 import { trpc } from '../utils/trpc';
 
 const Listings = () => {
-  const suggestionsListingsQuery = trpc.usersListings.useQuery(1)
-  const favouritesListingsQuery = trpc.usersListings.useQuery(2)
-  const followersListingsQuery = trpc.usersListings.useQuery(3)
+  const suggestionsListingsQuery = trpc.usersListings.useQuery('user1@example.com')
+  const favouritesListingsQuery = trpc.usersListings.useQuery('user2@example.com')
+  const followersListingsQuery = trpc.usersListings.useQuery('user3@example.com')
 
   return (
     <SafeAreaView>

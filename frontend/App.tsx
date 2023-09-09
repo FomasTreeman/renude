@@ -1,10 +1,12 @@
 import * as SecureStore from 'expo-secure-store';
-import React, { useState } from 'react';
+import * as Linking from 'expo-linking';
+import React, { useState, useEffect, useCallback } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NavigationContainer } from '@react-navigation/native';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { useFonts } from 'expo-font';
 import { httpBatchLink } from '@trpc/client';
+import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
 
 import { ThemeContext } from './context/ThemeContext';
 import { theme } from './theme'
@@ -31,9 +33,8 @@ const tokenCache = {
   },
 };
 
-
-
 const App = () => {
+  // const { handleURLCallback } = useStripe();
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -54,25 +55,63 @@ const App = () => {
     return null;
   }
 
+  // const handleDeepLink = useCallback(
+  //   async (url: string | null) => {
+  //     if (url) {
+  //       const stripeHandled = await handleURLCallback(url);
+  //       if (stripeHandled) {
+  //         // This was a Stripe URL - you can return or add extra handling here as you see fit
+  //       } else {
+  //         // This was NOT a Stripe URL – handle as you normally would
+  //       }
+  //     }
+  //   },
+  //   [handleURLCallback]
+  // );
+
+  // useEffect(() => {
+  //   const getUrlAsync = async () => {
+  //     const initialUrl = await Linking.getInitialURL();
+  //     handleDeepLink(initialUrl);
+  //   };
+
+  //   getUrlAsync();
+
+  //   const deepLinkListener = Linking.addEventListener(
+  //     'url',
+  //     (event: { url: string }) => {
+  //       handleDeepLink(event.url);
+  //     }
+  //   );
+
+  //   return () => deepLinkListener.remove();
+  // }, [handleDeepLink]);
+
+
   return (
     <ThemeContext.Provider value={theme}>
       <ClerkProvider
-        tokenCache={tokenCache}
         publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string}
+        tokenCache={tokenCache}
       >
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
-          <QueryClientProvider client={queryClient}>
-            <NavigationContainer>
-              <SignedIn>
-                <TabNavigator />
-              </SignedIn>
-              <SignedOut>
-                <AuthNavigator />
-              </SignedOut>
-            </NavigationContainer>
-          </QueryClientProvider>
-        </trpc.Provider>
-
+        <StripeProvider
+          publishableKey={process.env.EXPO_PUBLIC_TEST_STRIPE_KEY as string}
+          urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+        // merchantIdentifier="merchant.com.{{YOUR_APP_NAME}}" // required for Apple Pay
+        >
+          <trpc.Provider client={trpcClient} queryClient={queryClient}>
+            <QueryClientProvider client={queryClient}>
+              <NavigationContainer>
+                <SignedIn>
+                  <TabNavigator />
+                </SignedIn>
+                <SignedOut>
+                  <AuthNavigator />
+                </SignedOut>
+              </NavigationContainer>
+            </QueryClientProvider>
+          </trpc.Provider>
+        </StripeProvider>
       </ClerkProvider>
     </ThemeContext.Provider >
   );
