@@ -263,7 +263,9 @@ const server = createHTTPServer({
   router: appRouter,
 });
 
-server.listen(3000);
+const PORT = process.env.PORT
+
+server.listen(PORT !== undefined ? parseInt(PORT) : 3001);
 
 export type AppRouter = typeof appRouter;
 
