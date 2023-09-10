@@ -3,6 +3,7 @@ const bucketName = process.env.BUCKET_NAME;
 const accessKeyId = process.env.CLOUDFLARE_ACCESS_KEY;
 const secretAccessKey = process.env.CLOUDFLARE_SECRET_ACCESS_KEY;
 const cloudflareAccountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+const stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
 
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
@@ -18,9 +19,7 @@ const S3 = new S3Client({
 const express = require('express');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-const stripe = require('stripe')(
-  'sk_test_51NoOjBHiRPX37kVcixgRmFIu9C9FDyHZxInfNdzgTq8vgHUbFR5YLPLbfBTrv7jNAoQnsLMZfoVpbcPhx4txicC900252HXgYl'
-);
+const stripe = require('stripe')(stripePublishableKey);
 
 const app = express();
 

@@ -1,4 +1,4 @@
-const stripe = require("stripe")("sk_test_51NoOjBHiRPX37kVcixgRmFIu9C9FDyHZxInfNdzgTq8vgHUbFR5YLPLbfBTrv7jNAoQnsLMZfoVpbcPhx4txicC900252HXgYl");
+const stripe = require("stripe")(process.env.STRIPE_PUBLISHABLE_KEY);
 import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import { publicProcedure, router } from './trpc';
 import { z } from 'zod';
