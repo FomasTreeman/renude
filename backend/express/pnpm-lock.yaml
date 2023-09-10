@@ -29,6 +29,9 @@ dependencies:
   nodemon:
     specifier: ^3.0.1
     version: 3.0.1
+  stripe:
+    specifier: ^13.5.0
+    version: 13.5.0
 
 packages:
 
@@ -1183,6 +1186,10 @@ packages:
       tslib: 2.6.1
     dev: false
 
+  /@types/node@20.6.0:
+    resolution: {integrity: sha512-najjVq5KN2vsH2U/xyh2opaSEz6cZMR2SetLIlxlj08nOcmPOemJmUK2o4kUzfLqfrWE0PIrNeE16XhYDd3nqg==}
+    dev: false
+
   /abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
     dev: false
@@ -2039,6 +2046,14 @@ packages:
     resolution: {integrity: sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==}
     dependencies:
       safe-buffer: 5.2.1
+    dev: false
+
+  /stripe@13.5.0:
+    resolution: {integrity: sha512-odGQbvkDVxR7ldxXth7kWaUv6M31bsPMYKCBR8oIIRDoiR4MfxWaLdz5h7QQDsGtelZugqx7AEVoC6twST+0VQ==}
+    engines: {node: '>=12.*'}
+    dependencies:
+      '@types/node': 20.6.0
+      qs: 6.11.0
     dev: false
 
   /strnum@1.0.5:

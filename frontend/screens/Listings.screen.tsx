@@ -12,7 +12,7 @@ const Listings = () => {
     <SafeAreaView>
       <ScrollView>
 
-        <Text tag='h1' textStyle='mx-auto my-3'> Hello 😀 </Text>
+        <Text tag='h1' textStyle='mx-auto my-3'>renude</Text>
         <View>
           <View style={{
             flex: 1,

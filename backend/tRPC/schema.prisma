@@ -19,17 +19,17 @@ model Listing {
   image       Image[]
   favourite   Favourite[]
   offer       Offer[]
-  order       Order[]
+  order       Purchase[]
 
   @@index([userId])
 }
 
 model Offer {
   id        Int      @id @default(autoincrement())
-  price     Int
-  accepted  Boolean?
   userId    Int
   listingId Int
+  accepted  Boolean?
+  price     Int
   user      User     @relation(fields: [userId], references: [id])
   listing   Listing  @relation(fields: [listingId], references: [id])
 
@@ -37,7 +37,7 @@ model Offer {
   @@index([listingId])
 }
 
-model Order {
+model Purchase {
   id        Int     @id @default(autoincrement())
   userId    Int
   listingId Int
@@ -89,6 +89,6 @@ model User {
   favourite Favourite[]
   ratingRx  Rating[]    @relation("rx")
   ratingTx  Rating[]    @relation("tx")
-  Order     Order[]
+  Purchase  Purchase[]
   Offer     Offer[]
 }

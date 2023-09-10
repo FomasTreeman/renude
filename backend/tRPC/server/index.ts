@@ -228,19 +228,29 @@ const appRouter = router({
       });
       return { secret: intent.client_secret }
     }),
-  createOrder: publicProcedure.input(
+  createPurchase: publicProcedure.input(
     z.object({
       email: z.string(),
       listingId: z.number(),
     })
   ).mutation(async ({ input }) => {
     try {
-      await db.order.create({
+      const promises = []
+      promises.push(db.purchase.create({
         data: {
           userId: await getUserIdByEmail(input.email),
           listingId: input.listingId,
         }
-      })
+      }))
+      promises.push(db.listing.update({
+        where: {
+          id: input.listingId
+        },
+        data: {
+          sold: true,
+        }
+      }))
+      await Promise.all(promises)
     } catch (e) {
       console.error(e)
     }

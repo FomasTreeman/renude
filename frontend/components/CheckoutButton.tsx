@@ -7,8 +7,8 @@ import { Alert } from 'react-native';
 
 export default function Checkout({ email, listingId, amount }: { email: string, listingId: number, amount: number }) {
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
-    const createOrder = trpc.createOrder.useMutation()
-    const { data, error, refetch: createPaymentIntent } = trpc.createIntent.useQuery(amount, { enabled: false })
+    const createOrder = trpc.createPurchase.useMutation()
+    const { data, error, refetch: createPaymentIntent } = trpc.createIntent.useQuery(amount * 100, { enabled: false })
 
     const initializePaymentSheet = async (secret: string) => {
         const { error } = await initPaymentSheet({
@@ -31,11 +31,19 @@ export default function Checkout({ email, listingId, amount }: { email: string, 
         }
     }
 
+    // const waitOnPaymentIntentResolve = () => {
+    // fetch('http://localhost:3001', {
+    //     method: 'POST',
+    //     headers: {
+
+    //     }
+    // })
+    // }
+
     const didTapCheckoutButton = async () => {
 
         // 1. 
         await createPaymentIntent()
-
         if (!data?.secret || error) return
 
         // 2. 
@@ -43,6 +51,8 @@ export default function Checkout({ email, listingId, amount }: { email: string, 
 
         // 3.
         showPaymentSheet()
+
+        // waitOnPaymentIntentResolve()
 
     }
 

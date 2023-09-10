@@ -7,6 +7,7 @@ import { trpc } from '../utils/trpc';
 import Button from '../components/Button';
 import Text from '../components/Text';
 import Back from '../components/Back';
+import CheckoutButton from '../components/CheckoutButton';
 
 
 export default function Account() {
@@ -39,7 +40,7 @@ export default function Account() {
                             : <Button colour='purple' text='declined offer' cb={() => { }} />
                     :
                     accepted === undefined || accepted === null ? <Button colour='yellow' text='pending offer request' cb={() => { }} /> :
-                        accepted ? <Button colour='green' text='Pay now' cb={() => { }} />
+                        accepted ? <CheckoutButton email={email} listingId={listing.id} amount={price} />
                             : <Button colour='purple' text='Declined request' cb={() => { }} />
                 }
             </View>

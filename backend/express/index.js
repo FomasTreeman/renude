@@ -18,6 +18,9 @@ const S3 = new S3Client({
 const express = require('express');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
+const stripe = require('stripe')(
+  'sk_test_51NoOjBHiRPX37kVcixgRmFIu9C9FDyHZxInfNdzgTq8vgHUbFR5YLPLbfBTrv7jNAoQnsLMZfoVpbcPhx4txicC900252HXgYl'
+);
 
 const app = express();
 
@@ -33,6 +36,40 @@ const upload = multer({
       cb(null, req.query.name);
     },
   }),
+});
+
+const endpointSecret =
+  'whsec_730065328cd4d373a2bb7d47731bd1e2b9f3329873ee6455fb893ac739e6b4ae';
+
+app.post('/webhook', function (request, response) {
+  const sig = request.headers['stripe-signature'];
+  const body = request.body;
+
+  let event = null;
+
+  try {
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+  } catch (err) {
+    // invalid signature
+    response.status(400).end();
+    return;
+  }
+
+  let intent = null;
+  switch (event['type']) {
+    case 'payment_intent.succeeded':
+      intent = event.data.object;
+      console.log('Succeeded:', intent.id);
+      break;
+    case 'payment_intent.payment_failed':
+      intent = event.data.object;
+      const message =
+        intent.last_payment_error && intent.last_payment_error.message;
+      console.log('Failed:', intent.id, message);
+      break;
+  }
+
+  response.sendStatus(200);
 });
 
 app.post('/upload', upload.array('photos'), (req, res) => {
