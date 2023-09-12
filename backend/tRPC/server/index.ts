@@ -1,3 +1,4 @@
+require('dotenv').config();
 const stripe = require("stripe")(process.env.STRIPE_PUBLISHABLE_KEY);
 import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import { publicProcedure, router } from './trpc';
@@ -43,6 +44,9 @@ const appRouter = router({
 
   allListings: publicProcedure.query(async () => {
     return await db.listing.findMany({
+      where: {
+        sold: false
+      },
       include: {
         image: {
           select: {
@@ -213,25 +217,27 @@ const appRouter = router({
       console.error(e)
     }
   }),
-  //*  ------ ORDER ---------
+  //*  ------ PURCHASES ---------
 
   createIntent: publicProcedure
     .input(z.number())
     .output(
       z.object({
         secret: z.string(),
+        id: z.string(),
       })
     ).query(async ({ input }) => {
       const intent = await stripe.paymentIntents.create({
         amount: input,
         currency: 'gbp'
       });
-      return { secret: intent.client_secret }
+      return { secret: intent.client_secret, id: intent.id }
     }),
   createPurchase: publicProcedure.input(
     z.object({
       email: z.string(),
       listingId: z.number(),
+      paymentId: z.string(),
     })
   ).mutation(async ({ input }) => {
     try {
@@ -240,6 +246,7 @@ const appRouter = router({
         data: {
           userId: await getUserIdByEmail(input.email),
           listingId: input.listingId,
+          paymentId: input.paymentId,
         }
       }))
       promises.push(db.listing.update({
@@ -254,6 +261,48 @@ const appRouter = router({
     } catch (e) {
       console.error(e)
     }
+  }),
+  allSold: publicProcedure.input(z.string()).query(async ({ input }) => {
+    try {
+      return await db.purchase.findMany({
+        where: {
+          listing: {
+            user: {
+              email: input
+            }
+          }
+        },
+        include: {
+          listing: {
+            include: {
+              image: true
+            }
+          },
+        }
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }),
+  allPurchases: publicProcedure.input(z.string()).query(async ({ input }) => {
+    try {
+      return await db.purchase.findMany({
+        where: {
+          user: {
+            email: input
+          }
+        },
+        include: {
+          listing: {
+            include: {
+              image: true
+            }
+          },
+        }
+      })
+    } catch (e) {
+      console.error(e)
+    }
   })
 });
 
@@ -265,7 +314,7 @@ const server = createHTTPServer({
 
 const PORT = process.env.PORT
 
-server.listen(PORT !== undefined ? parseInt(PORT) : 3001);
+server.listen(PORT !== undefined ? parseInt(PORT) : 3000);
 
 export type AppRouter = typeof appRouter;
 

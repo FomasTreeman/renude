@@ -12,6 +12,8 @@ import Listing from '../screens/Listing.screen';
 import Account from '../screens/Account.screen';
 import Search from '../screens/Search.screen';
 import Offers from '../screens/Offers.screen';
+import Sold from '../screens/Sold.screen';
+import Purchases from '../screens/Purchases.screen';
 
 const Tab = createBottomTabNavigator()
 const ListingsStack = createNativeStackNavigator();
@@ -48,6 +50,8 @@ function AccountTabs() {
         <SearchStack.Navigator screenOptions={{ headerShown: false }}>
             <ListingsStack.Screen name="Account" component={Account} />
             <ListingsStack.Screen name="Offers" component={Offers} />
+            <ListingsStack.Screen name="Sold" component={Sold} />
+            <ListingsStack.Screen name="Purchases" component={Purchases} />
         </SearchStack.Navigator >
     )
 }

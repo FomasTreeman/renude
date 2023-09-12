@@ -7,7 +7,7 @@ import { Alert } from 'react-native';
 
 export default function Checkout({ email, listingId, amount }: { email: string, listingId: number, amount: number }) {
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
-    const createOrder = trpc.createPurchase.useMutation()
+    const createPurchase = trpc.createPurchase.useMutation()
     const { data, error, refetch: createPaymentIntent } = trpc.createIntent.useQuery(amount * 100, { enabled: false })
 
     const initializePaymentSheet = async (secret: string) => {
@@ -20,25 +20,16 @@ export default function Checkout({ email, listingId, amount }: { email: string, 
         }
     };
 
-    const showPaymentSheet = async () => {
+    const showPaymentSheet = async (paymentId: string) => {
         const { error } = await presentPaymentSheet();
 
         if (error) {
             Alert.alert('Error code:', error.code)
         } else {
             // Payment completed - show a confirmation screen.
-            createOrder.mutate({ email, listingId: listingId })
+            createPurchase.mutate({ email, listingId: listingId, paymentId })
         }
     }
-
-    // const waitOnPaymentIntentResolve = () => {
-    // fetch('http://localhost:3001', {
-    //     method: 'POST',
-    //     headers: {
-
-    //     }
-    // })
-    // }
 
     const didTapCheckoutButton = async () => {
 
@@ -50,9 +41,7 @@ export default function Checkout({ email, listingId, amount }: { email: string, 
         initializePaymentSheet(data?.secret)
 
         // 3.
-        showPaymentSheet()
-
-        // waitOnPaymentIntentResolve()
+        showPaymentSheet(data?.id)
 
     }
 
@@ -60,4 +49,4 @@ export default function Checkout({ email, listingId, amount }: { email: string, 
         <Button colour="green" cb={didTapCheckoutButton} text='Buy now' />
     )
 
-}
+} 

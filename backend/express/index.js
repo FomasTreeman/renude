@@ -37,39 +37,36 @@ const upload = multer({
   }),
 });
 
-const endpointSecret =
-  'whsec_730065328cd4d373a2bb7d47731bd1e2b9f3329873ee6455fb893ac739e6b4ae';
+// I THINK? strip will hit this endpoint when a paymentIntent is either successful or denied, then needs to make a request to the tRPC server to either delete the purchase adn send an email or accept the purchase.
+// app.post('/webhook', function (request, response) {
+//   const body = request.body;
 
-app.post('/webhook', function (request, response) {
-  const sig = request.headers['stripe-signature'];
-  const body = request.body;
+//   let event = null;
 
-  let event = null;
+//   try {
+//     event = stripe.webhooks.constructEvent(request.body, sig);
+//   } catch (err) {
+//     // invalid signature
+//     response.status(400).end();
+//     return;
+//   }
 
-  try {
-    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-  } catch (err) {
-    // invalid signature
-    response.status(400).end();
-    return;
-  }
+//   let intent = null;
+//   switch (event['type']) {
+//     case 'payment_intent.succeeded':
+//       intent = event.data.object;
+//       console.log('Succeeded:', intent.id);
+//       break;
+//     case 'payment_intent.payment_failed':
+//       intent = event.data.object;
+//       const message =
+//         intent.last_payment_error && intent.last_payment_error.message;
+//       console.log('Failed:', intent.id, message);
+//       break;
+//   }
 
-  let intent = null;
-  switch (event['type']) {
-    case 'payment_intent.succeeded':
-      intent = event.data.object;
-      console.log('Succeeded:', intent.id);
-      break;
-    case 'payment_intent.payment_failed':
-      intent = event.data.object;
-      const message =
-        intent.last_payment_error && intent.last_payment_error.message;
-      console.log('Failed:', intent.id, message);
-      break;
-  }
-
-  response.sendStatus(200);
-});
+//   response.sendStatus(200);
+// });
 
 app.post('/upload', upload.array('photos'), (req, res) => {
   if (!req.files || req.files.length === 0)

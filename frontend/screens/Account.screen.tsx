@@ -34,8 +34,18 @@ export default function Account() {
                         />
                         <Button
                             colour='green'
-                            text='offers'
+                            text='Offers'
                             cb={() => { navigation.navigate('Offers' as never) }}
+                        />
+                        <Button
+                            colour='yellow'
+                            text='Purchases'
+                            cb={() => { navigation.navigate('Purchases' as never) }}
+                        />
+                        <Button
+                            colour='yellow'
+                            text='Sold'
+                            cb={() => { navigation.navigate('Sold' as never) }}
                         />
                     </View>
                 }

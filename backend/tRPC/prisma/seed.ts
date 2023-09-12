@@ -1,5 +1,7 @@
 import prisma from "../server/db";
 
+const testUserId = 16
+
 const locations = [
     { lat: 51.509865, lng: -0.118092 }, // london
     { lat: 51.752022, lng: -1.257677 }, // Oxford
@@ -50,40 +52,42 @@ const filenames = [
     "bulksplash-ugmonk-Lj1S1_KD61k.jpg",
 ];
 
-async function createListing(userId: number, price: number, description: string): Promise<void> {
-    await prisma.listing.create({
-        data: {
-            userId: userId,
-            price: price,
-            description: description,
-        },
-    });
-}
 
 async function seedData() {
     // Create Users
     const users = [];
     for (let i = 0; i < 15; i++) {
-        const user = await prisma.user.create({
-            data: {
+        const user = await prisma.user.upsert({
+            where: { email: `user${i + 1}@example.com` },
+            create: {
                 email: `user${i + 1}@example.com`,
                 lng: locations[i].lng,
                 lat: locations[i].lat,
             },
             select: {
                 id: true
-            }
+            },
+            update: {}
         });
         users.push(user);
     }
 
     console.log('Created users')
 
-    // Create Listings, Favourites, and Ratings for each user
     let filenameCounter = 0
+    let lastListingId = 0
     for (const user of users) {
+        // Create Listings
         for (let i = 0; i < 10; i++) {
-            await createListing(user.id, (i + 1) * 1000, `Listing ${i + 1} by User ${user.id}`);
+            await prisma.listing.upsert({
+                where: { id: i },
+                create: {
+                    userId: user.id,
+                    price: (i + 1) * 100,
+                    description: `Listing ${i + 1} by User ${user.id}`,
+                },
+                update: {}
+            });
         }
 
         for (const listing of await prisma.listing.findMany({
@@ -102,9 +106,9 @@ async function seedData() {
                 },
             });
 
+            // Create Ratings
             const rxId = Math.floor(Math.random() * users.length);
             const txId = rxId !== 0 ? rxId - 1 : users.length - 1;
-            // Create Ratings
             await prisma.rating.create({
                 data: {
                     rating: Math.floor(Math.random() * 5) + 1,
@@ -113,7 +117,7 @@ async function seedData() {
                 },
             });
 
-            //Create 3 Images
+            //Create Images
             for (let j = 0; j < 4; j++) {
                 await prisma.image.create({
                     data: {
@@ -123,15 +127,44 @@ async function seedData() {
                 });
                 filenameCounter == filenames.length ? 0 : filenameCounter + 1
             }
+
+            // create Offers
+            for (let j = 1; j <= 3; j++) {
+                await prisma.offer.create({
+                    data: {
+                        userId: user.id === 1 ? 2 : 1,
+                        listingId: listing.id,
+                        price: 90 * j,
+                        accepted: j <= 2 ? true : false,
+                    },
+                });
+            }
+            lastListingId = listing.id
         }
+        // Create purchase
+        const userId = user.id === testUserId ? 1 : user.id + 1
+        await prisma.purchase.create({
+            data: {
+                userId,
+                listingId: lastListingId,
+                paymentId: `payment${lastListingId}`,
+            },
+        });
+        await prisma.listing.update({
+            where: {
+                id: lastListingId
+            },
+            data: {
+                sold: true
+            }
+        })
 
         console.log(`Seed data created for user ${user.id} out of ${users.length} users`);
-
     }
-
-
-    console.log('Seed data created.');
 }
+
+
+console.log('Seed data created.');
 
 seedData()
     .catch((error) => {
